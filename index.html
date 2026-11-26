@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLASS CUP</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23fbbf24'/%3E%3Cstop offset='.55' stop-color='%23a855f7'/%3E%3Cstop offset='1' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='15' fill='%23090d16'/%3E%3Cpath d='M19 12h26v9c0 12-5 19-13 19s-13-7-13-19z' fill='url(%23g)'/%3E%3Cpath d='M19 17H9v5c0 9 5 13 14 13M45 17h10v5c0 9-5 13-14 13M32 40v8m-11 5h22M24 48h16' fill='none' stroke='%23fbbf24' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение шрифта Inter и киберспортивного шрифта Chakra Petch -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Иконки Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Chakra Petch', 'sans-serif'],
+                    },
+                    colors: {
+                        cyber: {
+                            bg: '#090d16',
+                            card: '#111827',
+                            cardHover: '#1a2333',
+                            border: '#1f2937',
+                            neonBlue: '#00f0ff',
+                            neonPurple: '#a855f7',
+                            neonAmber: '#f59e0b',
+                            neonGreen: '#10b981',
+                            neonRed: '#ef4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #060914;
+            color: #f8fafc;
+            background-image:
+                radial-gradient(at 12% 14%, rgba(168, 85, 247, 0.34) 0px, transparent 52%),
+                radial-gradient(at 88% 12%, rgba(14, 165, 233, 0.32) 0px, transparent 50%),
+                radial-gradient(at 78% 82%, rgba(236, 72, 153, 0.24) 0px, transparent 52%),
+                radial-gradient(at 22% 88%, rgba(34, 211, 238, 0.24) 0px, transparent 50%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Жидкие переливающиеся сферы на заднем плане */
+        .bg-orb-left {
+            position: fixed;
+            top: -90px;
+            left: -90px;
+            width: 440px;
+            height: 440px;
+            background: radial-gradient(circle, rgba(192, 132, 252, 0.35) 0%, rgba(99, 102, 241, 0.12) 45%, transparent 72%);
+            filter: blur(55px);
+            pointer-events: none;
+            z-index: -1;
+            animation: liquidFloat 14s ease-in-out infinite alternate;
+        }
+
+        .bg-orb-right {
+            position: fixed;
+            bottom: -110px;
+            right: -80px;
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.32) 0%, rgba(236, 72, 153, 0.14) 45%, transparent 72%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: -1;
+            animation: liquidFloat 18s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes liquidFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(35px, 25px) scale(1.08); }
+        }
+
+        /* Эффект Liquid Glass (Жидкое стекло) для карточек */
+        .arena-card {
+            position: relative;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.11) 0%,
+                rgba(255, 255, 255, 0.04) 48%,
+                rgba(255, 255, 255, 0.08) 100%
+            );
+            backdrop-filter: blur(26px) saturate(180%);
+            -webkit-backdrop-filter: blur(26px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow:
+                0 24px 48px -12px rgba(2, 6, 23, 0.65),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+                inset 0 -1px 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Мягкий зеркальный блик по верхнему краю стекла */
+        .hud-corners::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 12%;
+            right: 12%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+            pointer-events: none;
+        }
+
+        .neon-shadow-blue {
+            box-shadow:
+                0 24px 48px -12px rgba(2, 6, 23, 0.65),
+                0 0 36px rgba(56, 189, 248, 0.16),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.38);
+        }
+        
+        .neon-shadow-purple {
+            box-shadow:
+                0 24px 48px -12px rgba(2, 6, 23, 0.65),
+                0 0 36px rgba(192, 132, 252, 0.18),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.38);
+        }
+
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060914;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Линии сетки плей-офф на десктопе */
+        @media (min-width: 1024px) {
+            .bracket-connector-right {
+                position: relative;
+            }
+            .bracket-connector-right::after {
+                content: '';
+                position: absolute;
+                right: -1.5rem;
+                top: 50%;
+                width: 1.5rem;
+                height: 2px;
+                background: linear-gradient(to right, rgba(255, 255, 255, 0.45), rgba(56, 189, 248, 0.55));
+                opacity: 0.75;
+            }
+        }
+
+        /* ==================== ЗАСТАВКА В СТИЛЕ NETFLIX ==================== */
+        #netflix-intro {
+            background:
+                radial-gradient(circle at 50% 42%, rgba(168, 85, 247, 0.34) 0%, rgba(14, 165, 233, 0.22) 38%, rgba(4, 6, 15, 0.98) 78%),
+                #04060f;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .intro-spotlight {
+            position: absolute;
+            width: 680px;
+            height: 680px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.16) 0%, rgba(168, 85, 247, 0.22) 40%, transparent 70%);
+            filter: blur(48px);
+            pointer-events: none;
+        }
+
+        .intro-grid-floor {
+            position: absolute;
+            inset: -45%;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+            background-size: 56px 56px;
+            transform: perspective(650px) rotateX(62deg) translateY(15%);
+            mask-image: radial-gradient(ellipse at center, black 18%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 18%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .intro-light-beams {
+            position: absolute;
+            inset: -15%;
+            background:
+                conic-gradient(from 210deg at 50% 42%, transparent 0deg, rgba(168, 85, 247, 0.22) 30deg, transparent 65deg, rgba(34, 211, 238, 0.22) 125deg, transparent 165deg, rgba(251, 191, 36, 0.18) 245deg, transparent 300deg);
+            filter: blur(44px);
+            pointer-events: none;
+        }
+
+        .intro-logo-box {
+            box-shadow: 0 0 42px rgba(251, 191, 36, 0.35), 0 0 70px rgba(168, 85, 247, 0.45);
+        }
+
+        .oval-enter-btn {
+            box-shadow: 0 0 28px rgba(168, 85, 247, 0.45), 0 0 52px rgba(34, 211, 238, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+
+        /* CINEMATIC CLASS CUP INTRO — first season identity */
+        #netflix-intro { isolation:isolate; background: radial-gradient(ellipse at 50% 48%,rgba(35,44,91,.72),transparent 48%), radial-gradient(circle at 15% 18%,rgba(124,58,237,.25),transparent 30%), radial-gradient(circle at 88% 78%,rgba(6,182,212,.2),transparent 32%), #03040b; }
+        #netflix-intro::before { content:""; position:absolute; inset:-50%; opacity:.42; background: repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg 8deg,rgba(129,140,248,.12) 8.2deg 8.5deg,transparent 9deg 18deg); animation: introRays 36s linear infinite; }
+        #netflix-intro::after { content:""; position:absolute; inset:0; opacity:.23; background-image:radial-gradient(2px 2px at 12% 22%,#fff 50%,transparent 60%),radial-gradient(1px 1px at 73% 16%,#fff 50%,transparent 60%),radial-gradient(2px 2px at 84% 68%,#a5f3fc 50%,transparent 60%),radial-gradient(1px 1px at 31% 78%,#fff 50%,transparent 60%),radial-gradient(1px 1px at 58% 43%,#c4b5fd 50%,transparent 60%); background-size:320px 260px; animation:starDrift 18s linear infinite; }
+        @keyframes introRays { to { transform:rotate(360deg); } } @keyframes starDrift { to { background-position:320px 260px; } }
+        .intro-composition { min-height:220px; transition:gap .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1); }
+        .intro-logo-box { width:clamp(170px,25vw,250px)!important;height:clamp(170px,25vw,250px)!important;border-radius:42px!important; transition:width .95s cubic-bezier(.2,.8,.2,1),height .95s cubic-bezier(.2,.8,.2,1),border-radius .95s,transform .95s,box-shadow .8s; animation:logoCinematic 1.25s cubic-bezier(.2,.8,.2,1) both,arenaGlow 3.2s 1.3s ease-in-out infinite; }
+        .intro-logo-box svg { width:clamp(78px,11vw,112px)!important;height:clamp(78px,11vw,112px)!important;transition:all .8s; }
+        .intro-logo-box span { font-size:15px!important; }
+        #intro-text-wrap { opacity:0; transform:translateX(28px); transition:opacity .65s ease,transform .8s cubic-bezier(.2,.8,.2,1); }
+        .intro-letter { display:inline-block; opacity:0; transform:translateY(24px) rotateX(-65deg); filter:blur(7px); transition:opacity .38s ease,transform .5s cubic-bezier(.2,.8,.2,1),filter .5s; }
+        .intro-letter.visible { opacity:1; transform:translateY(0) rotateX(0);filter:blur(0); }
+        .intro-hidden { opacity:0; transform:translateY(18px); pointer-events:none; transition:opacity .7s ease,transform .7s ease; }
+        #intro-season-badge { position:absolute; top:8vh; left:50%; transform:translate(-50%,-12px); }
+        #intro-season-badge:not(.intro-hidden) { transform:translate(-50%,0); }
+        #netflix-intro.stage-shifted .intro-composition { gap:clamp(14px,3vw,34px); }
+        #netflix-intro.stage-shifted .intro-logo-box { width:clamp(76px,10vw,112px)!important;height:clamp(76px,10vw,112px)!important;border-radius:25px!important; }
+        #netflix-intro.stage-shifted .intro-logo-box svg { width:48px!important;height:48px!important; }
+        #netflix-intro.stage-shifted .intro-logo-box span { font-size:9px!important; }
+        #netflix-intro.stage-shifted #intro-text-wrap { opacity:1;transform:translateX(0); }
+        #netflix-intro.stage-shifted #intro-season-badge { opacity:1; }
+        #netflix-intro.stage-shifted #intro-subtitle,#netflix-intro.stage-shifted #intro-enter-wrap { opacity:1;transform:translateY(0);pointer-events:auto; }
+        #intro-letters-title { perspective:700px; }
+        .oval-enter-btn { border-color:rgba(196,181,253,.85); background:linear-gradient(110deg,rgba(124,58,237,.34),rgba(8,145,178,.24)); }
+        @keyframes logoCinematic { 0%{opacity:0;transform:scale(.42);filter:blur(18px)} 65%{opacity:1;transform:scale(1.06);filter:blur(0)} 100%{transform:scale(1)} }
+        @media(max-width:639px){ #netflix-intro.stage-shifted .intro-composition{gap:12px} #netflix-intro.stage-shifted #intro-text-wrap{text-align:center} #intro-season-badge{top:10vh} }
+
+        /* ==================== MOTION / MICRO-INTERACTIONS ==================== */
+        @keyframes arenaFadeUp {
+            from { opacity: 0; transform: translateY(22px) scale(.985); filter: blur(5px); }
+            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+        @keyframes arenaPop {
+            0% { opacity: 0; transform: translateY(18px) scale(.94); }
+            70% { opacity: 1; transform: translateY(-3px) scale(1.015); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes arenaGlow {
+            0%, 100% { box-shadow: 0 0 0 rgba(34,211,238,0); }
+            50% { box-shadow: 0 0 28px rgba(34,211,238,.18); }
+        }
+        @keyframes rippleOut {
+            to { transform: scale(3.5); opacity: 0; }
+        }
+        body.arena-entered main > * { animation: arenaFadeUp .7s cubic-bezier(.2,.75,.25,1) both; }
+        body.arena-entered main > *:nth-child(2) { animation-delay: .12s; }
+        body.arena-entered .arena-card { transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease; }
+        body.arena-entered .arena-card:hover { transform: translateY(-3px); border-color: rgba(125,211,252,.42); }
+        #netflix-intro { will-change: opacity, transform; }
+        #netflix-intro.intro-leaving { opacity: 0; transform: scale(1.035); filter: blur(8px); }
+        .intro-logo-box { animation: arenaPop .9s .15s both, arenaGlow 3.2s 1.1s ease-in-out infinite; }
+        .oval-enter-btn { position: relative; overflow: hidden; transition: transform .22s ease, box-shadow .22s ease, background .22s ease; }
+        .oval-enter-btn:hover { transform: translateY(-3px) scale(1.035); box-shadow: 0 0 36px rgba(168,85,247,.65), 0 0 68px rgba(34,211,238,.38), inset 0 1px 1px rgba(255,255,255,.5); }
+        .oval-enter-btn:active { transform: translateY(1px) scale(.96); }
+        button, [role="button"] { -webkit-tap-highlight-color: transparent; }
+        button:not(.oval-enter-btn) { transition: transform .18s ease, filter .18s ease, box-shadow .18s ease, background-color .18s ease; }
+        button:not(:disabled):hover { filter: brightness(1.13); }
+        button:not(:disabled):active { transform: scale(.96); }
+        .arena-ripple { position: absolute; border-radius: 50%; pointer-events: none; background: rgba(255,255,255,.35); transform: scale(0); animation: rippleOut .55s ease-out forwards; }
+        #match-modal:not(.hidden) > div,
+        #teams-modal:not(.hidden) > div,
+        #rules-modal:not(.hidden) > div,
+        #prizes-modal:not(.hidden) > div { animation: arenaPop .28s cubic-bezier(.2,.8,.2,1) both; }
+        #match-modal, #teams-modal, #rules-modal, #prizes-modal { transition: opacity .22s ease; }
+        #view-groups:not(.hidden), #view-playoffs:not(.hidden), #view-history:not(.hidden) { animation: arenaFadeUp .42s ease both; }
+        #toast:not(.opacity-0) > div { animation: arenaPop .25s ease both; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+
+
+        /* CLASS CUP season dashboard additions */
+        .cc-stat-card{background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.13);border-radius:20px;padding:16px;box-shadow:inset 0 1px rgba(255,255,255,.12);}
+        .cc-stat-value{font-family:Orbitron, sans-serif;font-weight:800;letter-spacing:.02em;font-size:clamp(1.35rem,3vw,2rem);color:#fff;}
+        #champion-banner.cc-champion-celebrate{animation:championRise .8s cubic-bezier(.2,.8,.2,1) both;position:relative;overflow:hidden;}
+        #champion-banner.cc-champion-celebrate:after{content:'✦  ✧  ✦  ✧  ✦';position:absolute;inset:0;display:flex;align-items:center;justify-content:space-around;color:#fde68a;font-size:24px;pointer-events:none;animation:championSpark 2.2s ease-out both;}
+        @keyframes championRise{0%{opacity:0;transform:translateY(18px) scale(.96);filter:blur(5px)}65%{opacity:1;transform:translateY(-3px) scale(1.015);filter:blur(0)}100%{transform:none}}
+        @keyframes championSpark{0%{opacity:0;transform:translateY(20px) scale(.7)}20%{opacity:.9}100%{opacity:0;transform:translateY(-28px) scale(1.25)}}
+        .cc-countdown-number{font-variant-numeric:tabular-nums;font-family:Orbitron, sans-serif;font-weight:800;font-size:clamp(1.15rem,3vw,1.7rem);color:#67e8f9;}
+
+    </style>
+</head>
+<body class="antialiased selection:bg-purple-500 selection:text-white pb-16">
+    <!-- ==================== СТАРТОВЫЙ ЭКРАН ПРИВЕТСТВИЯ ==================== -->
+    <div id="netflix-intro" class="fixed inset-0 z-[100] flex flex-col items-center justify-center px-4 overflow-hidden select-none">
+        <div class="intro-spotlight"></div>
+        <div class="intro-light-beams"></div>
+        <div class="intro-grid-floor"></div>
+
+        <!-- Бейдж первого сезона сверху -->
+        <div id="intro-season-badge" class="relative z-10 mb-6 px-4 py-1.5 rounded-full bg-white/[0.1] backdrop-blur-xl border border-amber-300/40 text-amber-200 text-[11px] sm:text-xs font-display font-bold tracking-[0.22em] uppercase shadow-[0_0_25px_rgba(251,191,36,0.25)] intro-hidden">
+            ★ SEASON I ★
+        </div>
+
+        <!-- Центральная композиция: Иконка кубка слева + Название справа -->
+        <div id="intro-composition" class="intro-composition relative z-10 flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6">
+            <!-- Эмблема CLASS CUP с SVG-кубком -->
+            <div class="intro-logo-box relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-amber-300 via-purple-500 to-cyan-400 p-[3px] shrink-0">
+                <div class="w-full h-full bg-[#070b17]/95 rounded-[21px] flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/25 via-transparent to-cyan-400/25"></div>
+                    <svg class="w-12 h-12 sm:w-14 sm:h-14 relative z-10 drop-shadow-[0_0_16px_rgba(251,191,36,0.75)]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 12H44V26C44 32.6274 38.6274 38 32 38C25.3726 38 20 32.6274 20 26V12Z" fill="url(#cupGoldGrad)" stroke="#FEF08A" stroke-width="2.5"/>
+                        <path d="M20 16H13C13 24 16.5 28 21 29" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M44 16H51C51 24 47.5 28 43 29" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M32 38V47" stroke="#FDE047" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M22 52H42L39 47H25L22 52Z" fill="url(#cupGoldGrad)" stroke="#FEF08A" stroke-width="2"/>
+                        <path d="M32 19L33.9 22.9L38.2 23.5L35.1 26.5L35.8 30.8L32 28.8L28.2 30.8L28.9 26.5L25.8 23.5L30.1 22.9L32 19Z" fill="#FFFBEB"/>
+                        <defs>
+                            <linearGradient id="cupGoldGrad" x1="20" y1="12" x2="44" y2="52" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#FDE047"/>
+                                <stop offset="0.55" stop-color="#F59E0B"/>
+                                <stop offset="1" stop-color="#D97706"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="relative z-10 font-display font-bold text-[10px] tracking-[0.22em] text-cyan-300 mt-0.5">CUP #1</span>
+                </div>
+            </div>
+
+            <!-- Полное название и подпись -->
+            <div id="intro-text-wrap" class="text-center sm:text-left">
+                <div id="intro-letters-title" class="font-display font-bold text-3xl sm:text-5xl md:text-6xl tracking-wider text-white drop-shadow-[0_4px_24px_rgba(168,85,247,0.55)]">
+                    CLASS CUP 2×2
+                </div>
+                <div id="intro-subtitle" class="intro-hidden mt-2 flex items-center justify-center sm:justify-start gap-2 text-xs sm:text-sm text-slate-200 font-medium tracking-widest uppercase">
+                    <span class="px-2.5 py-0.5 rounded-md bg-amber-400/20 border border-amber-300/40 text-amber-300 font-bold">1-Й СЕЗОН</span>
+                    <span>•</span>
+                    <span>Brawl Stars × Standoff 2</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Овальная кнопка ВОЙТИ -->
+        <div id="intro-enter-wrap" class="intro-hidden relative z-10 mt-10">
+            <button type="button" onclick="enterArenaFromIntro()" class="oval-enter-btn group relative px-12 py-3.5 rounded-full bg-white/[0.14] hover:bg-white/[0.22] backdrop-blur-2xl border-2 border-white/45 hover:border-cyan-300 text-white font-display font-bold text-base sm:text-lg tracking-[0.24em] uppercase transition-all duration-200 active:scale-95 flex items-center gap-3 cursor-pointer">
+                <span>ВОЙТИ</span>
+                <i data-lucide="arrow-right" class="w-5 h-5 text-cyan-300 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="bg-orb-left"></div>
+    <div class="bg-orb-right"></div>
+
+    <!-- Переключатель звуковых эффектов -->
+    <button id="sound-toggle" type="button" aria-label="Выключить звук" aria-pressed="true" class="fixed bottom-5 right-5 z-[100] w-12 h-12 rounded-full border border-cyan-300/40 bg-slate-950/75 backdrop-blur-xl text-cyan-200 shadow-[0_0_24px_rgba(34,211,238,.2)] hover:bg-cyan-400/15 hover:scale-110 active:scale-95 transition-all flex items-center justify-center" title="Звуковые эффекты">
+        <i data-lucide="volume-2" class="w-5 h-5"></i>
+    </button>
+
+    <!-- Уведомление (Toast) строго по центру сверху экрана -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transform -translate-y-24 opacity-0 transition-all duration-300 pointer-events-none w-[max-content] max-w-[92vw]">
+        <div class="bg-white/15 backdrop-blur-2xl border border-white/25 text-white px-4 py-3 rounded-2xl shadow-[0_12px_32px_rgba(0,0,0,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center gap-3">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-300 shrink-0"></i>
+            <span id="toast-message" class="text-sm font-medium">Уведомление</span>
+        </div>
+    </div>
+
+    <!-- Верхняя панель навигации -->
+    <header class="sticky top-0 z-30 bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 border-b border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_-1px_0_rgba(255,255,255,0.08)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+            <!-- Логотип с кубком и название турнира слева -->
+            <div onclick="switchTab('groups')" class="flex items-center gap-3 min-w-0 cursor-pointer group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-purple-500 to-cyan-500 p-[1.5px] shrink-0 shadow-[0_0_20px_rgba(168,85,247,0.35)] group-hover:scale-105 transition">
+                    <div class="w-full h-full bg-[#090d16]/90 rounded-[10px] flex items-center justify-center">
+                        <i data-lucide="trophy" class="w-5 h-5 text-amber-400"></i>
+                    </div>
+                </div>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-display font-bold text-base sm:text-xl tracking-wide bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent truncate">
+                            CLASS CUP
+                        </h1>
+                        <span class="px-2 py-0.5 rounded-full bg-amber-400/20 border border-amber-300/40 text-amber-300 text-[10px] font-display font-bold tracking-wider shrink-0">
+                            #1 • СЕЗОН I
+                        </span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-slate-400 font-medium tracking-wide truncate">Первый школьный кибертурнир • БС × СТ2</p>
+                </div>
+            </div>
+
+            <!-- Кнопки управления справа -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                <!-- Индикатор облачной синхронизации -->
+                <div id="sync-status-badge" class="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/[0.06] border border-white/15 text-[11px] font-medium text-slate-300" title="Статус синхронизации с облаком">
+                    <span id="sync-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span id="sync-text">Локально</span>
+                </div>
+
+                <!-- Кнопка Правил -->
+                <button onclick="openRulesModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] border border-white/15 text-slate-100 text-xs sm:text-sm font-medium transition active:scale-95">
+                    <i data-lucide="book-open" class="w-4 h-4 text-amber-400"></i>
+                    <span class="hidden md:inline">Правила</span>
+                </button>
+
+                <!-- Кнопка Наград -->
+                <button onclick="openPrizesModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/35 text-amber-200 text-xs sm:text-sm font-semibold transition active:scale-95" title="Призовой фонд турнира">
+                    <i data-lucide="gift" class="w-4 h-4 text-amber-400"></i>
+                    <span class="hidden md:inline">Награды</span>
+                </button>
+
+                <!-- Переключатель Режима Организатора -->
+                <button id="admin-toggle-btn" onclick="toggleAdminMode()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 text-xs sm:text-sm font-semibold transition active:scale-95">
+                    <i id="admin-icon" data-lucide="lock" class="w-4 h-4"></i>
+                    <span id="admin-label">Админ</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Панель инструментов организатора (видна только в Admin Mode) -->
+        <div id="admin-toolbar" class="hidden bg-purple-950/60 backdrop-blur-xl border-t border-purple-400/25 px-4 py-2.5">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-2 text-purple-200 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Режим организатора: нажмите на любой матч для ввода счёта</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="openTeamsModal()" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium transition flex items-center gap-1">
+                        <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                        <span>Составы команд</span>
+                    </button>
+                    <button onclick="seedPlayoffsFromGroups()" class="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium transition flex items-center gap-1" title="Автоматически перенести топ-команды из групп в сетку плей-офф">
+                        <i data-lucide="git-merge" class="w-3.5 h-3.5"></i>
+                        <span>Обновить сетку</span>
+                    </button>
+                    <button onclick="archiveCurrentSeasonPrompt()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-medium transition flex items-center gap-1" title="Сохранить текущий сезон в историю и начать новый Class Cup">
+                        <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                        <span>В архив / Новый сезон</span>
+                    </button>
+                    <button onclick="confirmResetTournament()" class="px-3 py-1.5 rounded-lg bg-red-900/60 hover:bg-red-800 border border-red-500/40 text-red-200 font-medium transition flex items-center gap-1">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Сброс</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контейнер -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+        
+        <!-- Переключатель вкладок (Групповой этап / Плей-офф / История сезонов) -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div class="inline-flex flex-wrap p-1.5 rounded-2xl bg-white/[0.07] backdrop-blur-2xl border border-white/15 self-start shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] gap-1">
+                <button id="tab-groups" onclick="switchTab('groups')" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 bg-white/20 text-white border border-white/25 shadow-[0_4px_16px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.4)]">
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                    <span>Групповой этап</span>
+                </button>
+                <button id="tab-playoffs" onclick="switchTab('playoffs')" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 text-slate-300 hover:text-white border border-transparent">
+                    <i data-lucide="git-fork" class="w-4 h-4"></i>
+                    <span>Плей-офф сетка</span>
+                </button>
+                <button id="tab-history" onclick="switchTab('history')" class="px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 text-slate-300 hover:text-white border border-transparent">
+                    <i data-lucide="archive" class="w-4 h-4 text-cyan-300"></i>
+                    <span>Архив сезонов</span>
+                </button>
+            </div>
+
+            <!-- Краткая легенда очков -->
+            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-200 bg-white/[0.07] backdrop-blur-2xl px-4 py-2.5 rounded-2xl border border-white/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <span class="px-2 py-0.5 rounded-md bg-amber-400/20 text-amber-300 font-bold">Сезон #1</span>
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span> БС (BO3) = 1 очко</span>
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span> СТ2 = 1 очко</span>
+                <span class="hidden md:inline text-white/20">|</span>
+                <span class="hidden md:inline text-slate-200">Финал СТ2: <b class="text-amber-300">Sandstone</b></span>
+            </div>
+        </div>
+
+        <!-- ==================== ВКЛАДКА 1: ГРУППОВОЙ ЭТАП ==================== -->
+        <section id="view-groups" class="space-y-6">
+            <!-- Верхняя строка: Турнирные таблицы Группы А и Группы Б рядом -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- ТАБЛИЦА ГРУППЫ А -->
+                <div class="arena-card hud-corners border border-purple-400/30 rounded-3xl p-4 sm:p-6 neon-shadow-purple">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500/35 to-indigo-500/20 border border-purple-400/40 text-purple-200 font-display font-bold flex items-center justify-center shadow-inner">A</span>
+                            <div>
+                                <h2 class="font-display font-bold text-lg sm:text-xl text-white tracking-wide leading-none">Группа А</h2>
+                                <span class="text-[11px] text-slate-400">4 команды • Круговая система</span>
+                            </div>
+                        </div>
+                        <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-purple-500/20 border border-purple-400/35 text-purple-200">1–2 место → 1/2</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-white/15 text-[11px] uppercase tracking-wider text-slate-400">
+                                    <th class="py-2 pl-2">#</th>
+                                    <th class="py-2">Команда</th>
+                                    <th class="py-2 text-center" title="Сыграно противостояний">И</th>
+                                    <th class="py-2 text-center" title="Выиграно / Проиграно дисциплин">БС/СТ2</th>
+                                    <th class="py-2 pr-2 text-right font-bold text-purple-300">Очки</th>
+                                </tr>
+                            </thead>
+                            <tbody id="standings-A" class="divide-y divide-white/10 text-sm">
+                                <!-- Заполняется JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ТАБЛИЦА ГРУППЫ Б -->
+                <div class="arena-card hud-corners border border-cyan-400/30 rounded-3xl p-4 sm:p-6 neon-shadow-blue">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500/35 to-blue-500/20 border border-cyan-400/40 text-cyan-200 font-display font-bold flex items-center justify-center shadow-inner">Б</span>
+                            <div>
+                                <h2 class="font-display font-bold text-lg sm:text-xl text-white tracking-wide leading-none">Группа Б</h2>
+                                <span class="text-[11px] text-slate-400">4 команды • Круговая система</span>
+                            </div>
+                        </div>
+                        <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/35 text-cyan-200">1–2 место → 1/2</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-white/15 text-[11px] uppercase tracking-wider text-slate-400">
+                                    <th class="py-2 pl-2">#</th>
+                                    <th class="py-2">Команда</th>
+                                    <th class="py-2 text-center" title="Сыграно противостояний">И</th>
+                                    <th class="py-2 text-center" title="Выиграно / Проиграно дисциплин">БС/СТ2</th>
+                                    <th class="py-2 pr-2 text-right font-bold text-cyan-300">Очки</th>
+                                </tr>
+                            </thead>
+                            <tbody id="standings-B" class="divide-y divide-white/10 text-sm">
+                                <!-- Заполняется JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Нижняя строка: Расписание и результаты матчей обеих групп -->
+            <div class="arena-card hud-corners border border-white/15 rounded-3xl p-4 sm:p-6">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+                    <h3 class="font-display font-bold text-base sm:text-lg text-white flex items-center gap-2">
+                        <i data-lucide="swords" class="w-5 h-5 text-amber-400"></i>
+                        <span>Расписание и счёт матчей</span>
+                    </h3>
+                    <span class="text-xs text-slate-400">Всего по 6 матчей в каждой группе</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-wider text-purple-300 mb-3 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                            <span>Матчи Группы А</span>
+                        </div>
+                        <div id="matches-A" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <!-- Заполняется JS -->
+                        </div>
+                    </div>
+
+                    <div class="lg:border-l lg:border-white/10 lg:pl-6">
+                        <div class="text-xs font-bold uppercase tracking-wider text-cyan-300 mb-3 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                            <span>Матчи Группы Б</span>
+                        </div>
+                        <div id="matches-B" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <!-- Заполняется JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- СТАТИСТИКА СЕЗОНА, MVP И ОБРАТНЫЙ ОТСЧЁТ -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+                <div class="xl:col-span-2 arena-card border border-amber-300/25 rounded-3xl p-4 sm:p-6">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <div>
+                            <div class="text-[11px] uppercase tracking-[.2em] text-amber-300 font-bold">Season overview</div>
+                            <h3 class="font-display text-lg font-bold text-white">Статистика турнира</h3>
+                        </div>
+                        <i data-lucide="chart-no-axes-combined" class="w-6 h-6 text-amber-300"></i>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="season-stats-grid">
+                        <div class="cc-stat-card"><div class="text-xs text-slate-400">Сыграно матчей</div><div class="cc-stat-value" id="stat-played">0</div></div>
+                        <div class="cc-stat-card"><div class="text-xs text-slate-400">Всего матчей</div><div class="cc-stat-value" id="stat-total">18</div></div>
+                        <div class="cc-stat-card"><div class="text-xs text-slate-400">Команд</div><div class="cc-stat-value" id="stat-teams">8</div></div>
+                        <div class="cc-stat-card"><div class="text-xs text-slate-400">Лидер групп</div><div class="text-sm font-bold text-amber-200 mt-2" id="stat-leader">Пока нет</div></div>
+                    </div>
+                    <div class="mt-4 rounded-2xl bg-black/20 border border-white/10 p-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2"><span class="text-xs font-bold text-slate-200">Прогресс турнира</span><span id="stat-progress-label" class="text-xs text-cyan-200">0%</span></div>
+                        <div class="h-2 rounded-full bg-white/10 overflow-hidden"><div id="stat-progress-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-300" style="width:0%"></div></div>
+                    </div>
+                </div>
+                <div class="arena-card border border-purple-300/25 rounded-3xl p-4 sm:p-6">
+                    <div class="flex items-center justify-between mb-3"><div><div class="text-[11px] uppercase tracking-[.2em] text-purple-300 font-bold">Player award</div><h3 class="font-display text-lg font-bold text-white">MVP сезона</h3></div><i data-lucide="crown" class="w-6 h-6 text-amber-300"></i></div>
+                    <div class="rounded-2xl bg-gradient-to-br from-amber-400/15 to-purple-500/15 border border-amber-300/20 p-4 text-center">
+                        <div class="text-3xl mb-2">👑</div><div id="mvp-display" class="font-bold text-white">Пока не выбран</div><div id="mvp-team-display" class="text-xs text-slate-400 mt-1">Выбор MVP доступен администратору</div>
+                    </div>
+                    <div class="admin-only hidden mt-3"><label for="mvp-select" class="text-xs text-slate-300 block mb-1.5">Назначить MVP</label><select id="mvp-select" onchange="setSeasonMVP(this.value)" class="w-full rounded-xl bg-slate-950 border border-white/15 text-white text-sm px-3 py-2"><option value="">Не выбран</option></select></div>
+                </div>
+            </div>
+
+            <div class="arena-card border border-cyan-300/25 rounded-3xl p-4 sm:p-5">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-2xl bg-cyan-400/15 border border-cyan-300/25 flex items-center justify-center"><i data-lucide="timer" class="w-5 h-5 text-cyan-300"></i></div><div><div class="text-[11px] uppercase tracking-[.2em] text-cyan-300 font-bold">Next match</div><h3 class="font-display text-lg font-bold text-white">До следующего матча</h3><p id="countdown-caption" class="text-xs text-slate-400">Дата матча ещё не указана</p></div></div>
+                    <div class="flex items-center gap-3 sm:gap-5"><div class="text-center"><div id="cd-days" class="cc-countdown-number">—</div><div class="text-[10px] uppercase text-slate-400">дней</div></div><div class="text-center"><div id="cd-hours" class="cc-countdown-number">—</div><div class="text-[10px] uppercase text-slate-400">часов</div></div><div class="text-center"><div id="cd-minutes" class="cc-countdown-number">—</div><div class="text-[10px] uppercase text-slate-400">минут</div></div><div class="text-center"><div id="cd-seconds" class="cc-countdown-number">—</div><div class="text-[10px] uppercase text-slate-400">секунд</div></div></div>
+                    <div class="admin-only hidden min-w-[220px]"><label for="next-match-date" class="text-xs text-slate-300 block mb-1.5">Дата и время (админ)</label><input id="next-match-date" type="datetime-local" onchange="setNextMatchDate(this.value)" class="w-full rounded-xl bg-slate-950 border border-white/15 text-white text-xs px-3 py-2"><button onclick="setNextMatchDate('')" class="text-[11px] text-slate-400 hover:text-white mt-1">Очистить дату</button></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ВКЛАДКА 2: ПЛЕЙ-ОФФ СЕТКА ==================== -->
+        <section id="view-playoffs" class="hidden space-y-6">
+            
+            <!-- Блок 1: Полуфиналы -> Гранд-Финал -->
+            <div class="arena-card hud-corners border border-white/15 rounded-3xl p-4 sm:p-6">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+                    <div>
+                        <h2 class="font-display font-bold text-lg sm:text-xl text-white flex items-center gap-2">
+                            <i data-lucide="crown" class="w-5 h-5 text-amber-400"></i>
+                            <span>Решающая сетка Плей-офф</span>
+                        </h2>
+                        <p class="text-xs text-slate-300/80 mt-0.5">Проигравшая команда вычеркивается. В Гранд-финале карта СТ2 — строго Sandstone.</p>
+                    </div>
+                    <button onclick="seedPlayoffsFromGroups()" class="admin-only hidden text-xs px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-cyan-200 font-semibold transition">
+                        Подтянуть места из групп
+                    </button>
+                </div>
+
+                <!-- Двухколоночная сетка: Слева 1/2 финала, Справа Гранд-Финал -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+                    
+                    <!-- Левая колонка (6 cols): Оба полуфинала -->
+                    <div class="lg:col-span-6 space-y-4">
+                        <div class="text-xs font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                            <span>1/2 Финала (Полуфиналы)</span>
+                        </div>
+                        <div id="playoff-sf1" class="bracket-connector-right"></div>
+                        <div id="playoff-sf2" class="bracket-connector-right"></div>
+                    </div>
+
+                    <!-- Правая колонка (6 cols): Гранд-Финал и Баннер Чемпиона -->
+                    <div class="lg:col-span-6 space-y-4">
+                        <div class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                            <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
+                            <span>ГРАНД-ФИНАЛ (Битва за 1–2 место)</span>
+                        </div>
+                        <div id="playoff-final"></div>
+                        
+                        <!-- Баннер Чемпиона (появляется после завершения финала) -->
+                        <div id="champion-banner" class="hidden p-4 rounded-2xl bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-cyan-500/20 border border-amber-300/50 text-center shadow-[0_0_24px_rgba(251,191,36,0.2)]">
+                            <div class="text-xs uppercase tracking-widest text-amber-300 font-bold mb-1">🏆 Чемпионы класса</div>
+                            <div id="champion-name" class="font-display font-bold text-xl text-white">Название команды</div>
+                            <div id="champion-players" class="text-xs text-slate-200 mt-0.5">Игрок 1 & Игрок 2</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Блок 2: Матч за 3-е место и стыковые матчи за 5–8 места в одну аккуратную линию -->
+            <div class="arena-card border border-white/15 rounded-3xl p-4 sm:p-6">
+                <h2 class="font-display font-bold text-base sm:text-lg text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="medal" class="w-5 h-5 text-orange-400"></i>
+                    <span>Матч за Бронзу и стыковые игры (3–8 места)</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-wider text-orange-300 mb-2 flex items-center gap-1.5">
+                            <span>🥉 3–4 место (Бронза)</span>
+                        </div>
+                        <div id="playoff-third"></div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">5–6 место (А3 vs Б3)</div>
+                        <div id="playoff-fifth"></div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">7–8 место (А4 vs Б4)</div>
+                        <div id="playoff-seventh"></div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== ВКЛАДКА 3: ИСТОРИЯ СЕЗОНОВ CLASS CUP ==================== -->
+        <section id="view-history" class="hidden space-y-6">
+            <div class="arena-card hud-corners border border-cyan-400/30 rounded-3xl p-5 sm:p-6 neon-shadow-blue">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-300/35 text-amber-300 text-xs font-bold mb-2">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                            <span>ПЕРВЫЙ CLASS CUP • СЕЗОН I</span>
+                        </div>
+                        <h2 class="font-display font-bold text-xl sm:text-2xl text-white">Архив CLASS CUP — первый сезон и следующие турниры</h2>
+                        <p class="text-xs sm:text-sm text-slate-300/85 mt-1">Нажмите на любой сезон, чтобы открыть полную историю матчей, таблицы групп и сетку плей-офф.</p>
+                    </div>
+                    <button onclick="switchTab('groups')" class="self-start sm:self-center px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>К текущему турниру</span>
+                    </button>
+                </div>
+
+                <!-- Карточки сезонов (Class Cup #1 и будущие сезоны) -->
+                <div id="seasons-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                    <!-- Заполняется JS -->
+                </div>
+            </div>
+
+            <!-- Детальный просмотр выбранного сезона (история всех матчей) -->
+            <div id="season-detail-panel" class="arena-card border border-white/15 rounded-3xl p-5 sm:p-6 space-y-6">
+                <!-- Заполняется JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== МОДАЛЬНОЕ ОКНО: ВВОД СЧЕТА МАТЧА ==================== -->
+    <div id="match-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-gray-900 border border-gray-700 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl transform transition-all">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <span id="modal-match-stage" class="text-[11px] font-bold uppercase tracking-wider text-cyan-400">Групповой этап</span>
+                    <h3 class="font-display font-bold text-lg text-white">Результат противостояния</h3>
+                </div>
+                <button onclick="closeMatchModal()" class="p-1.5 rounded-lg bg-gray-800 text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Команды в матче -->
+            <div class="grid grid-cols-3 items-center gap-2 bg-gray-950 p-3 rounded-xl border border-gray-800 mb-5 text-center">
+                <div>
+                    <div id="modal-t1-name" class="font-bold text-sm text-white truncate">Команда 1</div>
+                    <div id="modal-t1-players" class="text-[11px] text-gray-400 truncate">Игроки</div>
+                </div>
+                <div class="text-xs font-display font-bold text-gray-500">VS</div>
+                <div>
+                    <div id="modal-t2-name" class="font-bold text-sm text-white truncate">Команда 2</div>
+                    <div id="modal-t2-players" class="text-[11px] text-gray-400 truncate">Игроки</div>
+                </div>
+            </div>
+
+            <!-- Выбор победителя по дисциплинам (интерактивно и без ошибок) -->
+            <div class="space-y-4 mb-5">
+                <!-- Дисциплина 1: Brawl Stars -->
+                <div class="bg-gray-800/50 p-3 rounded-xl border border-gray-700/70">
+                    <div class="flex items-center justify-between text-xs font-semibold text-amber-400 mb-2">
+                        <span>1. Brawl Stars (BO3: Броулбол, Ограб., Ранг)</span>
+                        <span>+1 очко</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" id="btn-bs-1" onclick="selectDisciplineWinner('bs', 1)" class="py-2 px-3 rounded-lg border text-xs font-bold transition truncate">
+                            Победа К1
+                        </button>
+                        <button type="button" id="btn-bs-2" onclick="selectDisciplineWinner('bs', 2)" class="py-2 px-3 rounded-lg border text-xs font-bold transition truncate">
+                            Победа К2
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Дисциплина 2: Standoff 2 -->
+                <div class="bg-gray-800/50 p-3 rounded-xl border border-gray-700/70">
+                    <div class="flex items-center justify-between text-xs font-semibold text-cyan-400 mb-2">
+                        <span id="modal-st2-label">2. Standoff 2 (Союзники)</span>
+                        <span>+1 очко</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" id="btn-st2-1" onclick="selectDisciplineWinner('st2', 1)" class="py-2 px-3 rounded-lg border text-xs font-bold transition truncate">
+                            Победа К1
+                        </button>
+                        <button type="button" id="btn-st2-2" onclick="selectDisciplineWinner('st2', 2)" class="py-2 px-3 rounded-lg border text-xs font-bold transition truncate">
+                            Победа К2
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Тай-брейк (появляется только в плей-офф при счете 1:1) -->
+                <div id="tiebreaker-box" class="hidden bg-purple-950/40 p-3 rounded-xl border border-purple-500/50">
+                    <div class="flex items-center justify-between text-xs font-semibold text-purple-300 mb-2">
+                        <span>⚡ Тай-брейк (Ничья 1:1 в плей-офф)</span>
+                        <span>Решающий</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" id="btn-tb-1" onclick="selectDisciplineWinner('tb', 1)" class="py-2 px-3 rounded-lg border text-xs font-bold transition truncate">
+                            Победа К1
+                        </button>
+                        <button type="button" id="btn-tb-2" onclick="selectDisciplineWinner('tb', 2)" class="py-2 px-3 rounded-lg border text-xs font-bold transition truncate">
+                            Победа К2
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Итоговый предпросмотр очков -->
+            <div class="flex items-center justify-between bg-gray-950 px-4 py-2.5 rounded-xl border border-gray-800 mb-5">
+                <span class="text-xs text-gray-400">Итоговый счет матча:</span>
+                <span id="modal-total-preview" class="font-display font-bold text-base text-white">0 : 0</span>
+            </div>
+
+            <!-- Кнопки сохранения / очистки -->
+            <div class="flex items-center gap-2">
+                <button onclick="clearMatchResult()" class="px-3 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold transition">
+                    Очистить
+                </button>
+                <button onclick="saveMatchResult()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white text-sm font-bold shadow-lg transition">
+                    Сохранить результат
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== МОДАЛЬНОЕ ОКНО: РЕДАКТИРОВАНИЕ КОМАНД ==================== -->
+    <div id="teams-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-gray-900 border border-gray-700 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-800">
+                <div>
+                    <h3 class="font-display font-bold text-lg text-white">Редактирование команд (8 дуо)</h3>
+                    <p class="text-xs text-gray-400">Измените названия команд и ники игроков (по 2 человека)</p>
+                </div>
+                <button onclick="closeTeamsModal()" class="p-1.5 rounded-lg bg-gray-800 text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div id="teams-editor-list" class="p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Заполняется JS -->
+            </div>
+
+            <div class="p-4 border-t border-gray-800 flex justify-end gap-2 bg-gray-950/50 rounded-b-2xl">
+                <button onclick="closeTeamsModal()" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium">Отмена</button>
+                <button onclick="saveTeamsEdit()" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold">Сохранить составы</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== МОДАЛЬНОЕ ОКНО: ПРАВИЛА ТУРНИРА ==================== -->
+    <div id="rules-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-gray-900 border border-gray-700 rounded-2xl max-w-2xl w-full max-h-[88vh] flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-800">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                        <i data-lucide="scroll-text" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-lg text-white">Регламент турнира</h3>
+                        <p class="text-xs text-gray-400">Официальные правила Brawl Stars × Standoff 2</p>
+                    </div>
+                </div>
+                <button onclick="closeRulesModal()" class="p-1.5 rounded-lg bg-gray-800 text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-5 overflow-y-auto space-y-5 text-sm text-gray-300 leading-relaxed">
+                <!-- Блок 1 -->
+                <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800">
+                    <h4 class="font-bold text-amber-400 mb-2 flex items-center gap-2">
+                        <i data-lucide="gamepad-2" class="w-4 h-4"></i>
+                        1. Формат противостояния (Кибер-двоеборье)
+                    </h4>
+                    <p class="text-xs text-gray-300 mb-2">В каждом матче две команды (2×2) играют <b>обе дисциплины подряд</b>:</p>
+                    <ul class="list-disc list-inside space-y-1 text-xs text-gray-300">
+                        <li><b class="text-white">Brawl Stars (BO3 — до 2 побед):</b> 1-я игра — <i>Броулбол</i>, 2-я игра — <i>Ограбление</i>, 3-я игра (при счете 1:1) — <i>Ранговый бой (Силовая лига с банами)</i>. Играется через дружеское лобби.</li>
+                        <li><b class="text-white">Standoff 2 (1 матч):</b> Режим <i>«Союзники» (2 на 2)</i>. Карта выбирается рандомом. В <b>Гранд-финале</b> 100% играется карта <span class="text-cyan-400 font-bold">Sandstone</span>.</li>
+                    </ul>
+                </div>
+
+                <!-- Блок 2 -->
+                <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800">
+                    <h4 class="font-bold text-cyan-400 mb-2 flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-4 h-4"></i>
+                        2. Начисление очков и сетка
+                    </h4>
+                    <ul class="list-disc list-inside space-y-1 text-xs text-gray-300">
+                        <li>Победа в серии Brawl Stars = <b>1 очко</b>. Победа в матче Standoff 2 = <b>1 очко</b>.</li>
+                        <li>Выиграли обе игры — получаете <b>2 очка</b> (соперник 0). Взяли по одной игре — <b>ничья 1:1</b> (по 1 очку).</li>
+                        <li>При равенстве очков в группе выше стоит команда, выигравшая личную встречу.</li>
+                        <li>В <b>Плей-офф</b> при ничьей 1:1 играется решающий тай-брейк (1 карта Нокаут в БС или дуэль в СТ2).</li>
+                    </ul>
+                </div>
+
+                <!-- Блок 3 -->
+                <div class="bg-gray-950/70 p-4 rounded-xl border border-gray-800">
+                    <h4 class="font-bold text-red-400 mb-2 flex items-center gap-2">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                        3. Дисциплина, карточки и неявка
+                    </h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <span class="px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-400 font-bold shrink-0">Желтая (Предупреждение)</span>
+                            <span>Опоздание на матч более 5–7 минут, оскорбления/токсичность в чате, спам токсичными пинами (дизлайк, клоун) в БС. <b>3 предупреждения = кик с турнира.</b></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 font-bold shrink-0">Красная (Дисквалификация)</span>
+                            <span>Любые читы, макросы, игра с ПК-эмулятора или передача аккаунта другому человеку. Моментальное исключение.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="px-1.5 py-0.5 rounded bg-gray-700 text-gray-200 font-bold shrink-0">Неявка игрока</span>
+                            <span>Если 1 игрок из пары не пришел — оставшийся может сыграть в меньшинстве (1 в 2). Если команда не вышла на связь вообще — техническое поражение (0:2).</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-gray-800 flex justify-end bg-gray-950/50 rounded-b-2xl">
+                <button onclick="closeRulesModal()" class="px-5 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold">Понятно</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== МОДАЛЬНОЕ ОКНО: НАГРАДЫ ТУРНИРА ==================== -->
+    <div id="prizes-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-gray-900 border border-amber-500/40 rounded-2xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-800">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                        <i data-lucide="gift" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-lg text-white">Призовой фонд</h3>
+                        <p class="text-xs text-gray-400">Награды выдаются обоим игрокам каждой призовой команды (2×2)</p>
+                    </div>
+                </div>
+                <button onclick="closePrizesModal()" class="p-1.5 rounded-lg bg-gray-800 text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-5 overflow-y-auto space-y-3.5 text-sm">
+                <!-- 1 Место: Brawl Pass Plus -->
+                <div class="bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-cyan-500/15 border border-amber-400/50 rounded-2xl p-4 flex items-center gap-4">
+                    <!-- Иконка Brawl Pass Plus (золотисто-фиолетовый билет с короной и плюсом) -->
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 via-yellow-500 to-purple-600 p-[2px] shrink-0 shadow-lg">
+                        <div class="w-full h-full bg-gray-950 rounded-[14px] flex flex-col items-center justify-center relative">
+                            <svg class="w-8 h-8" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="5" y="9" width="26" height="18" rx="4" fill="url(#bpPlusGrad)" stroke="#FDE047" stroke-width="1.5"/>
+                                <path d="M12 16L14.5 13L18 15.5L21.5 13L24 16V20H12V16Z" fill="#FEF08A"/>
+                                <circle cx="27" cy="10" r="5" fill="#A855F7" stroke="#FDE047" stroke-width="1.5"/>
+                                <path d="M27 8V12M25 10H29" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+                                <defs>
+                                    <linearGradient id="bpPlusGrad" x1="5" y1="9" x2="31" y2="27" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#F59E0B"/>
+                                        <stop offset="1" stop-color="#9333EA"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <span class="text-[9px] font-display font-bold tracking-wider text-amber-300 -mt-0.5">PLUS</span>
+                        </div>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">🥇 1 Место • 2 игрока</span>
+                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-200 font-semibold">×2 на команду</span>
+                        </div>
+                        <div class="font-display font-bold text-base text-white mt-0.5">Brawl Pass Plus</div>
+                        <p class="text-xs text-gray-300 mt-0.5">Каждому из двух игроков дуо — полный Brawl Pass Plus (Brawl Stars).</p>
+                    </div>
+                </div>
+
+                <!-- 2 Место: Обычный Brawl Pass -->
+                <div class="bg-gray-950/80 border border-purple-500/40 rounded-2xl p-4 flex items-center gap-4">
+                    <!-- Иконка обычного Brawl Pass (фиолетово-синий билет со звездой) -->
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 p-[2px] shrink-0">
+                        <div class="w-full h-full bg-gray-950 rounded-[14px] flex flex-col items-center justify-center">
+                            <svg class="w-8 h-8" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="5" y="10" width="26" height="16" rx="4" fill="url(#bpBaseGrad)" stroke="#C084FC" stroke-width="1.5"/>
+                                <path d="M18 13L19.6 16.3L23.2 16.8L20.6 19.3L21.2 22.9L18 21.2L14.8 22.9L15.4 19.3L12.8 16.8L16.4 16.3L18 13Z" fill="#FDE047"/>
+                                <defs>
+                                    <linearGradient id="bpBaseGrad" x1="5" y1="10" x2="31" y2="26" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#8B5CF6"/>
+                                        <stop offset="1" stop-color="#3B82F6"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <span class="text-[9px] font-display font-bold tracking-wider text-purple-300 -mt-0.5">PASS</span>
+                        </div>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-purple-300">🥈 2 Место • 2 игрока</span>
+                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-200 font-semibold">×2 на команду</span>
+                        </div>
+                        <div class="font-display font-bold text-base text-white mt-0.5">Обычный Brawl Pass</div>
+                        <p class="text-xs text-gray-300 mt-0.5">Каждому из двух игроков дуо — стандартный Brawl Pass (Brawl Stars).</p>
+                    </div>
+                </div>
+
+                <!-- 3 Место: 100 Голды -->
+                <div class="bg-gray-950/80 border border-orange-500/40 rounded-2xl p-4 flex items-center gap-4">
+                    <!-- Иконка золотой монеты / 100 голды -->
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500/30 to-amber-500/20 border border-orange-400/40 flex flex-col items-center justify-center shrink-0">
+                        <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="16" r="11" fill="#F59E0B" stroke="#FDE68A" stroke-width="2"/>
+                            <circle cx="16" cy="16" r="7.5" stroke="#B45309" stroke-width="1.5" stroke-dasharray="2 2"/>
+                            <path d="M16 11V21M13 14H19" stroke="#FEF3C7" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span class="text-[9px] font-display font-bold text-amber-300 mt-0.5">100 G</span>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-orange-300">🥉 3 Место • 2 игрока</span>
+                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-200 font-semibold">×2 на команду</span>
+                        </div>
+                        <div class="font-display font-bold text-base text-white mt-0.5">100 Голды каждому</div>
+                        <p class="text-xs text-gray-300 mt-0.5">По 100 голды каждому из двух игроков за бронзу (по 200 G на дуо).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-gray-800 flex justify-end bg-gray-950/50 rounded-b-2xl">
+                <button onclick="closePrizesModal()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 text-sm font-bold transition">Круто!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== МОДАЛЬНОЕ ОКНО: ВХОД В АДМИНКУ ==================== -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-gray-900 border border-purple-500/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 mx-auto mb-3">
+                <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display font-bold text-lg text-white text-center mb-4">Режим Организатора</h3>
+            
+            <input type="password" id="admin-password-input" placeholder="Введите пароль..." class="w-full px-4 py-2.5 rounded-xl bg-gray-950 border border-gray-700 text-white text-sm focus:outline-none focus:border-purple-500 mb-2" onkeydown="if(event.key==='Enter') submitAdminPassword()">
+            <p id="admin-error-msg" class="hidden text-xs text-red-400 mb-3 text-center">Неверный пароль!</p>
+            
+            <div class="flex gap-2 mt-4">
+                <button onclick="closeAdminLoginModal()" class="flex-1 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold">Отмена</button>
+                <button onclick="submitAdminPassword()" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold">Войти</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== МОДАЛЬНОЕ ОКНО: ПОДТВЕРЖДЕНИЕ СБРОСА ==================== -->
+    <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-gray-900 border border-red-500/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center">
+            <div class="w-12 h-12 rounded-2xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400 mx-auto mb-3">
+                <i data-lucide="alert-octagon" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display font-bold text-lg text-white">Сбросить весь турнир?</h3>
+            <p class="text-xs text-gray-400 mt-1 mb-5">Все очки, результаты матчей и сетка плей-офф будут очищены до начального состояния.</p>
+            <div class="flex gap-2">
+                <button onclick="closeResetModal()" class="flex-1 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold">Отмена</button>
+                <button onclick="executeResetTournament()" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold">Да, сбросить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== МОДАЛЬНОЕ ОКНО: АРХИВАЦИЯ СЕЗОНА И СТАРТ НОВОГО ==================== -->
+    <div id="archive-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-gray-900 border border-amber-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 mx-auto mb-3">
+                <i data-lucide="archive" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-display font-bold text-lg text-white text-center">Завершить сезон и сохранить в историю?</h3>
+            <p class="text-xs text-gray-300 text-center mt-1.5 mb-4">
+                Все матчи и результаты текущего турнира сохранятся в раздел <b>«Архив сезонов»</b>, а для нового <b>CLASS CUP</b> откроется чистая таблица.
+            </p>
+            <div class="space-y-3 mb-5">
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Название завершаемого сезона</label>
+                    <input type="text" id="archive-season-title" value="CLASS CUP #1 (Сезон I)" class="w-full px-3.5 py-2 rounded-xl bg-gray-950 border border-gray-700 text-white text-sm font-semibold focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Номер следующего нового сезона</label>
+                    <input type="number" id="next-season-number" value="2" min="2" class="w-full px-3.5 py-2 rounded-xl bg-gray-950 border border-gray-700 text-white text-sm font-semibold focus:outline-none focus:border-cyan-400">
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeArchiveModal()" class="flex-1 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold">Отмена</button>
+                <button onclick="executeArchiveSeason()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-purple-600 hover:from-amber-400 hover:to-purple-500 text-white text-xs font-bold">Сохранить и начать новый</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== СОСТОЯНИЕ И ДАННЫЕ ТУРНИРА ====================
+        const STORAGE_KEY = 'class_cup_bs_st2_v1';
+        const ADMIN_PASS = '14756';
+
+        // Начальные данные по умолчанию (8 команд по 2 человека)
+        const defaultState = {
+            seasonNumber: 1,
+            seasonLabel: 'CLASS CUP #1 • Первый сезон',
+            teams: [
+                { id: 1, group: 'A', name: 'Shadow Squad', p1: 'Игрок 1', p2: 'Игрок 2' },
+                { id: 2, group: 'A', name: 'Brawl Kings', p1: 'Игрок 3', p2: 'Игрок 4' },
+                { id: 3, group: 'A', name: 'Sandstone Pro', p1: 'Игрок 5', p2: 'Игрок 6' },
+                { id: 4, group: 'A', name: 'Cyber Wolves', p1: 'Игрок 7', p2: 'Игрок 8' },
+                { id: 5, group: 'B', name: 'Headshot Duo', p1: 'Игрок 9', p2: 'Игрок 10' },
+                { id: 6, group: 'B', name: 'Spike Rush', p1: 'Игрок 11', p2: 'Игрок 12' },
+                { id: 7, group: 'B', name: 'Phoenix Team', p1: 'Игрок 13', p2: 'Игрок 14' },
+                { id: 8, group: 'B', name: 'No Mercy', p1: 'Игрок 15', p2: 'Игрок 16' }
+            ],
+            groupMatches: [
+                // Группа А (каждый с каждым: 6 матчей)
+                { id: 'ga1', group: 'A', t1: 1, t2: 2, bsWinner: null, st2Winner: null },
+                { id: 'ga2', group: 'A', t1: 3, t2: 4, bsWinner: null, st2Winner: null },
+                { id: 'ga3', group: 'A', t1: 1, t2: 3, bsWinner: null, st2Winner: null },
+                { id: 'ga4', group: 'A', t1: 2, t2: 4, bsWinner: null, st2Winner: null },
+                { id: 'ga5', group: 'A', t1: 1, t2: 4, bsWinner: null, st2Winner: null },
+                { id: 'ga6', group: 'A', t1: 2, t2: 3, bsWinner: null, st2Winner: null },
+                // Группа Б (каждый с каждым: 6 матчей)
+                { id: 'gb1', group: 'B', t1: 5, t2: 6, bsWinner: null, st2Winner: null },
+                { id: 'gb2', group: 'B', t1: 7, t2: 8, bsWinner: null, st2Winner: null },
+                { id: 'gb3', group: 'B', t1: 5, t2: 7, bsWinner: null, st2Winner: null },
+                { id: 'gb4', group: 'B', t1: 6, t2: 8, bsWinner: null, st2Winner: null },
+                { id: 'gb5', group: 'B', t1: 5, t2: 8, bsWinner: null, st2Winner: null },
+                { id: 'gb6', group: 'B', t1: 6, t2: 7, bsWinner: null, st2Winner: null }
+            ],
+            playoffs: {
+                sf1: { id: 'sf1', title: 'Полуфинал 1 (А1 vs Б2)', t1: null, t2: null, bsWinner: null, st2Winner: null, tbWinner: null },
+                sf2: { id: 'sf2', title: 'Полуфинал 2 (Б1 vs А2)', t1: null, t2: null, bsWinner: null, st2Winner: null, tbWinner: null },
+                final: { id: 'final', title: 'Гранд-финал (Sandstone)', t1: null, t2: null, bsWinner: null, st2Winner: null, tbWinner: null },
+                third: { id: 'third', title: 'Матч за 3-е место', t1: null, t2: null, bsWinner: null, st2Winner: null, tbWinner: null },
+                fifth: { id: 'fifth', title: 'Матч за 5–6 место', t1: null, t2: null, bsWinner: null, st2Winner: null, tbWinner: null },
+                seventh: { id: 'seventh', title: 'Матч за 7–8 место', t1: null, t2: null, bsWinner: null, st2Winner: null, tbWinner: null }
+            },
+            archivedSeasons: []
+        };
+
+        let loadedState = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        let state = loadedState ? {
+            seasonNumber: loadedState.seasonNumber || 1,
+            seasonLabel: loadedState.seasonLabel || 'CLASS CUP #1 • Первый сезон',
+            teams: loadedState.teams || JSON.parse(JSON.stringify(defaultState.teams)),
+            groupMatches: loadedState.groupMatches || JSON.parse(JSON.stringify(defaultState.groupMatches)),
+            playoffs: loadedState.playoffs || JSON.parse(JSON.stringify(defaultState.playoffs)),
+            archivedSeasons: Array.isArray(loadedState.archivedSeasons) ? loadedState.archivedSeasons : [],
+            mvp: loadedState.mvp || '',
+            nextMatchAt: loadedState.nextMatchAt || ''
+        } : JSON.parse(JSON.stringify(defaultState));
+
+        let isAdmin = false;
+        let activeMatchEdit = null; // { type: 'group'|'playoff', id: string, bsWinner, st2Winner, tbWinner }
+        let selectedHistorySeasonId = 'current';
+
+        // ==================== АНИМАЦИЯ ЗАСТАВКИ В СТИЛЕ NETFLIX ====================
+        let introStarted = false;
+
+        function initNetflixIntro() {
+            if (introStarted) return;
+            introStarted = true;
+
+            const introEl = document.getElementById('netflix-intro');
+            const titleContainer = document.getElementById('intro-letters-title');
+            const seasonBadge = document.getElementById('intro-season-badge');
+            const subtitle = document.getElementById('intro-subtitle');
+            const enterWrap = document.getElementById('intro-enter-wrap');
+
+            if (!introEl || !titleContainer) return;
+
+            const titleText = 'CLASS CUP 2×2';
+            titleContainer.innerHTML = titleText.split('').map((ch) => {
+                if (ch === ' ') {
+                    return `<span class="intro-letter inline-block w-3 sm:w-4">&nbsp;</span>`;
+                }
+                return `<span class="intro-letter">${ch}</span>`;
+            }).join('');
+
+            const letters = titleContainer.querySelectorAll('.intro-letter');
+
+            // Сначала отдельный большой логотип, затем раскрывается титульная композиция
+            setTimeout(() => { seasonBadge.classList.remove('intro-hidden'); playCupSound('badge'); }, 450);
+
+            // 2. Иконка кубка плавно сдвигается влево и проявляются буквы по одной
+            setTimeout(() => {
+                introEl.classList.add('stage-shifted');
+                playCupSound('reveal');
+                letters.forEach((span, idx) => {
+                    setTimeout(() => {
+                        span.classList.add('visible');
+                        if (span.textContent.trim()) playCupSound('letter');
+                    }, 160 + idx * 75);
+                });
+            }, 1750);
+
+            // 3. Показываем подзаголовок и овальную кнопку ВОЙТИ
+            const totalLettersTime = 1750 + 160 + letters.length * 75;
+            setTimeout(() => {
+                subtitle.classList.remove('intro-hidden');
+                enterWrap.classList.remove('intro-hidden');
+            }, totalLettersTime);
+        }
+
+        function enterArenaFromIntro() {
+            const introEl = document.getElementById('netflix-intro');
+            if (!introEl) return;
+            introEl.classList.add('intro-leaving');
+            introEl.style.pointerEvents = 'none';
+            document.body.classList.add('arena-entered');
+            setTimeout(() => {
+                introEl.style.display = 'none';
+                renderAll();
+            }, 380);
+        }
+
+        // Сохранение состояния в браузер
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            renderAll();
+        }
+
+        // Уведомление по центру сверху
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = msg;
+            toast.classList.remove('-translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('-translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // ==================== ПОДСЧЕТ СТАТИСТИКИ ГРУПП ====================
+        function getGroupStandings(groupLetter) {
+            const teamsInGroup = state.teams.filter(t => t.group === groupLetter);
+            const matchesInGroup = state.groupMatches.filter(m => m.group === groupLetter);
+
+            const stats = teamsInGroup.map(team => ({
+                ...team,
+                played: 0,
+                wins: 0,
+                losses: 0,
+                points: 0
+            }));
+
+            matchesInGroup.forEach(m => {
+                if (m.bsWinner !== null && m.st2Winner !== null) {
+                    const t1 = stats.find(s => s.id === m.t1);
+                    const t2 = stats.find(s => s.id === m.t2);
+                    if (!t1 || !t2) return;
+
+                    t1.played++;
+                    t2.played++;
+
+                    let p1 = 0, p2 = 0;
+                    if (m.bsWinner === 1) p1++; else p2++;
+                    if (m.st2Winner === 1) p1++; else p2++;
+
+                    t1.points += p1;
+                    t2.points += p2;
+                    t1.wins += p1;
+                    t1.losses += (2 - p1);
+                    t2.wins += p2;
+                    t2.losses += (2 - p2);
+                }
+            });
+
+            // Сортировка: 1) Очки, 2) Личная встреча, 3) Разница побед/поражений
+            stats.sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+
+                const h2h = matchesInGroup.find(m =>
+                    (m.t1 === a.id && m.t2 === b.id) || (m.t1 === b.id && m.t2 === a.id)
+                );
+                if (h2h && h2h.bsWinner !== null && h2h.st2Winner !== null) {
+                    let ptsA = 0, ptsB = 0;
+                    if (h2h.t1 === a.id) {
+                        ptsA = (h2h.bsWinner === 1 ? 1 : 0) + (h2h.st2Winner === 1 ? 1 : 0);
+                        ptsB = 2 - ptsA;
+                    } else {
+                        ptsB = (h2h.bsWinner === 1 ? 1 : 0) + (h2h.st2Winner === 1 ? 1 : 0);
+                        ptsA = 2 - ptsB;
+                    }
+                    if (ptsB !== ptsA) return ptsB - ptsA;
+                }
+
+                return (b.wins - b.losses) - (a.wins - a.losses);
+            });
+
+            return stats;
+        }
+
+        function getTeamById(id) {
+            if (!id) return null;
+            return state.teams.find(t => t.id === id) || null;
+        }
+
+        // ==================== РЕНДЕР ИНТЕРФЕЙСА ====================
+        function renderAll() {
+            renderGroup('A');
+            renderGroup('B');
+            renderPlayoffs();
+            renderHistoryView();
+            renderSeasonDashboard();
+            lucide.createIcons();
+        }
+
+        // ==================== ДОПОЛНИТЕЛЬНАЯ СТАТИСТИКА, MVP И ТАЙМЕР ====================
+        const CC_MVP_KEY = 'class_cup_mvp_v1';
+        const CC_NEXT_MATCH_KEY = 'class_cup_next_match_v1';
+        let seasonMVP = state.mvp || localStorage.getItem(CC_MVP_KEY) || '';
+        let nextMatchAt = state.nextMatchAt || localStorage.getItem(CC_NEXT_MATCH_KEY) || '';
+        let countdownInterval = null;
+
+        function renderSeasonDashboard() {
+            const groupStats = [...getGroupStandings('A'), ...getGroupStandings('B')];
+            const playedGroup = state.groupMatches.filter(m => m.bsWinner !== null && m.st2Winner !== null).length;
+            const playoffKeys = ['sf1','sf2','final','third','fifth','seventh'];
+            const playedPlayoffs = playoffKeys.filter(k => getPlayoffOutcome(state.playoffs[k])).length;
+            const played = playedGroup + playedPlayoffs;
+            const total = state.groupMatches.length + playoffKeys.length;
+            const pct = total ? Math.round(played / total * 100) : 0;
+            const leader = groupStats.filter(t => t.played > 0).sort((a,b) => b.points-a.points)[0];
+            document.getElementById('stat-played').textContent = played;
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-teams').textContent = state.teams.length;
+            document.getElementById('stat-leader').textContent = leader ? leader.name : 'Пока нет';
+            document.getElementById('stat-progress-label').textContent = pct + '%';
+            document.getElementById('stat-progress-bar').style.width = pct + '%';
+
+            const select = document.getElementById('mvp-select');
+            if (select) {
+                const current = seasonMVP;
+                select.innerHTML = '<option value="">Не выбран</option>' + state.teams.flatMap(t => [
+                    {id:`${t.id}:1`, name:t.p1, team:t.name}, {id:`${t.id}:2`, name:t.p2, team:t.name}
+                ]).map(p => `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.team)}</option>`).join('');
+                select.value = current;
+            }
+            const chosen = seasonMVP ? (() => { const [id,slot] = seasonMVP.split(':'); const t = getTeamById(Number(id)); return t ? {name:slot==='1'?t.p1:t.p2,team:t.name} : null; })() : null;
+            document.getElementById('mvp-display').textContent = chosen ? chosen.name : 'Пока не выбран';
+            document.getElementById('mvp-team-display').textContent = chosen ? chosen.team : 'Выбор MVP доступен администратору';
+
+            const dateInput = document.getElementById('next-match-date');
+            if (dateInput && document.activeElement !== dateInput) dateInput.value = nextMatchAt;
+            updateMatchCountdown();
+        }
+
+        function setSeasonMVP(value) {
+            if (!isAdmin) return;
+            seasonMVP = value || '';
+            state.mvp = seasonMVP;
+            localStorage.setItem(CC_MVP_KEY, seasonMVP);
+            saveState();
+            showToast(seasonMVP ? 'MVP сезона обновлён!' : 'Выбор MVP сброшен');
+        }
+
+        function setNextMatchDate(value) {
+            if (!isAdmin) return;
+            nextMatchAt = value || '';
+            state.nextMatchAt = nextMatchAt;
+            if (nextMatchAt) localStorage.setItem(CC_NEXT_MATCH_KEY, nextMatchAt);
+            else localStorage.removeItem(CC_NEXT_MATCH_KEY);
+            saveState();
+            updateMatchCountdown();
+            const caption = document.getElementById('countdown-caption');
+            if (caption) caption.textContent = nextMatchAt ? 'До начала матча' : 'Дата матча ещё не указана';
+        }
+
+        function updateMatchCountdown() {
+            const caption = document.getElementById('countdown-caption');
+            const target = nextMatchAt ? new Date(nextMatchAt).getTime() : NaN;
+            const valid = Number.isFinite(target);
+            if (!valid) {
+                ['cd-days','cd-hours','cd-minutes','cd-seconds'].forEach(id => document.getElementById(id).textContent = '—');
+                if (caption) caption.textContent = 'Дата матча ещё не указана';
+                return;
+            }
+            const diff = target - Date.now();
+            if (diff <= 0) {
+                ['cd-days','cd-hours','cd-minutes','cd-seconds'].forEach(id => document.getElementById(id).textContent = '00');
+                if (caption) caption.textContent = 'Время матча наступило!';
+                return;
+            }
+            const days = Math.floor(diff / 86400000);
+            const hours = Math.floor(diff % 86400000 / 3600000);
+            const minutes = Math.floor(diff % 3600000 / 60000);
+            const seconds = Math.floor(diff % 60000 / 1000);
+            document.getElementById('cd-days').textContent = String(days).padStart(2,'0');
+            document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+            document.getElementById('cd-minutes').textContent = String(minutes).padStart(2,'0');
+            document.getElementById('cd-seconds').textContent = String(seconds).padStart(2,'0');
+            if (caption) caption.textContent = 'Обратный отсчёт до начала';
+        }
+
+        if (!countdownInterval) countdownInterval = setInterval(updateMatchCountdown, 1000);
+
+        function renderGroup(groupLetter) {
+            const standings = getGroupStandings(groupLetter);
+            const tbody = document.getElementById(`standings-${groupLetter}`);
+            const accentColor = groupLetter === 'A' ? 'text-purple-400' : 'text-cyan-400';
+
+            tbody.innerHTML = standings.map((team, idx) => {
+                const isTop2 = idx < 2;
+                const badgeClass = isTop2
+                    ? (groupLetter === 'A' ? 'bg-purple-500/20 text-purple-300 border-purple-500/40' : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40')
+                    : 'bg-gray-800 text-gray-400 border-gray-700';
+
+                return `
+                    <tr class="hover:bg-gray-800/40 transition">
+                        <td class="py-2.5 pl-2">
+                            <span class="w-6 h-6 rounded-md border ${badgeClass} text-xs font-bold inline-flex items-center justify-center">${idx + 1}</span>
+                        </td>
+                        <td class="py-2.5">
+                            <div class="font-bold text-white text-sm leading-tight">${escapeHtml(team.name)}</div>
+                            <div class="text-[11px] text-gray-400">${escapeHtml(team.p1)} & ${escapeHtml(team.p2)}</div>
+                        </td>
+                        <td class="py-2.5 text-center text-gray-300 font-medium">${team.played}</td>
+                        <td class="py-2.5 text-center text-xs text-gray-400">${team.wins} : ${team.losses}</td>
+                        <td class="py-2.5 pr-2 text-right font-display font-bold text-base ${accentColor}">${team.points}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Рендер матчей группы
+            const matches = state.groupMatches.filter(m => m.group === groupLetter);
+            const matchesContainer = document.getElementById(`matches-${groupLetter}`);
+
+            matchesContainer.innerHTML = matches.map(m => {
+                const t1 = getTeamById(m.t1);
+                const t2 = getTeamById(m.t2);
+                const isPlayed = m.bsWinner !== null && m.st2Winner !== null;
+
+                let s1 = 0, s2 = 0;
+                if (isPlayed) {
+                    s1 = (m.bsWinner === 1 ? 1 : 0) + (m.st2Winner === 1 ? 1 : 0);
+                    s2 = 2 - s1;
+                }
+
+                const t1Class = isPlayed && s1 < s2 ? 'text-gray-500 line-through' : 'text-white';
+                const t2Class = isPlayed && s2 < s1 ? 'text-gray-500 line-through' : 'text-white';
+                const cursorClass = isAdmin ? 'cursor-pointer hover:border-purple-500/60 hover:bg-gray-800/80' : '';
+
+                return `
+                    <div onclick="openMatchModal('group', '${m.id}')" class="bg-white/[0.06] backdrop-blur-xl border ${isPlayed ? 'border-white/20' : 'border-white/10'} shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] rounded-2xl p-3 transition ${cursorClass}">
+                        <div class="flex items-center justify-between text-[10px] text-slate-300/70 mb-1.5">
+                            <span>${isPlayed ? 'Завершен' : 'Ожидается'}</span>
+                            ${isPlayed ? `<span>БС: К${m.bsWinner} | СТ2: К${m.st2Winner}</span>` : (isAdmin ? '<span class="text-purple-300">Нажмите для ввода</span>' : '')}
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-semibold truncate pr-2 ${t1Class}">${escapeHtml(t1.name)}</span>
+                                <span class="font-display font-bold ${isPlayed ? (s1 > s2 ? 'text-emerald-300' : 'text-slate-300') : 'text-slate-500'}">${isPlayed ? s1 : '-'}</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-semibold truncate pr-2 ${t2Class}">${escapeHtml(t2.name)}</span>
+                                <span class="font-display font-bold ${isPlayed ? (s2 > s1 ? 'text-emerald-300' : 'text-slate-300') : 'text-slate-500'}">${isPlayed ? s2 : '-'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Определение победителя и проигравшего в матче плей-офф
+        function getPlayoffOutcome(match) {
+            if (match.bsWinner === null || match.st2Winner === null) return null;
+            let s1 = (match.bsWinner === 1 ? 1 : 0) + (match.st2Winner === 1 ? 1 : 0);
+            let s2 = 2 - s1;
+
+            if (s1 > s2) return { winnerSlot: 1, loserSlot: 2, s1, s2 };
+            if (s2 > s1) return { winnerSlot: 2, loserSlot: 1, s1, s2 };
+
+            // Ничья 1:1 -> смотрим тай-брейк
+            if (match.tbWinner === 1) return { winnerSlot: 1, loserSlot: 2, s1: '1+ТБ', s2: '1' };
+            if (match.tbWinner === 2) return { winnerSlot: 2, loserSlot: 1, s1: '1', s2: '1+ТБ' };
+
+            return null;
+        }
+
+        function renderPlayoffs() {
+            const slots = ['sf1', 'sf2', 'final', 'third', 'fifth', 'seventh'];
+            slots.forEach(key => {
+                const match = state.playoffs[key];
+                const container = document.getElementById(`playoff-${key}`);
+                if (!container) return;
+
+                const t1 = getTeamById(match.t1);
+                const t2 = getTeamById(match.t2);
+                const outcome = getPlayoffOutcome(match);
+                const isFinal = key === 'final';
+
+                const t1Loser = outcome && outcome.loserSlot === 1;
+                const t2Loser = outcome && outcome.loserSlot === 2;
+                const t1Winner = outcome && outcome.winnerSlot === 1;
+                const t2Winner = outcome && outcome.winnerSlot === 2;
+
+                const canEdit = isAdmin && t1 && t2;
+                const borderStyle = isFinal
+                    ? 'border-amber-300/40 bg-gradient-to-br from-white/[0.12] to-amber-500/[0.12] shadow-[inset_0_1px_1px_rgba(255,255,255,0.35)]'
+                    : 'border-white/15 bg-white/[0.06] shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]';
+
+                container.innerHTML = `
+                    <div onclick="${canEdit ? `openMatchModal('playoff', '${key}')` : ''}" class="backdrop-blur-2xl rounded-2xl border ${borderStyle} p-3.5 transition ${canEdit ? 'cursor-pointer hover:border-white/35 hover:bg-white/[0.1]' : ''}">
+                        <div class="flex items-center justify-between text-[11px] mb-2">
+                            <span class="font-semibold ${isFinal ? 'text-amber-300' : 'text-slate-300'}">${match.title}</span>
+                            ${canEdit ? '<span class="text-purple-300 text-[10px]">Изменить</span>' : ''}
+                        </div>
+                        <div class="space-y-2">
+                            <!-- Команда 1 -->
+                            <div class="flex items-center justify-between px-2.5 py-2 rounded-xl ${t1Winner ? 'bg-emerald-400/15 border border-emerald-300/35' : 'bg-white/[0.05] border border-white/10'}">
+                                <div class="min-w-0 pr-2">
+                                    <div class="text-xs sm:text-sm font-bold truncate ${t1Loser ? 'text-slate-400/60 line-through' : (t1 ? 'text-white' : 'text-slate-400/70 italic')}">
+                                        ${t1 ? escapeHtml(t1.name) : 'Ожидает соперника...'}
+                                    </div>
+                                    ${t1 ? `<div class="text-[10px] ${t1Loser ? 'text-slate-500' : 'text-slate-300/75'} truncate">${escapeHtml(t1.p1)} & ${escapeHtml(t1.p2)}</div>` : ''}
+                                </div>
+                                <span class="font-display font-bold text-sm ${t1Winner ? 'text-emerald-300' : (t1Loser ? 'text-slate-500' : 'text-slate-300')}">
+                                    ${outcome ? outcome.s1 : '-'}
+                                </span>
+                            </div>
+
+                            <!-- Команда 2 -->
+                            <div class="flex items-center justify-between px-2.5 py-2 rounded-xl ${t2Winner ? 'bg-emerald-400/15 border border-emerald-300/35' : 'bg-white/[0.05] border border-white/10'}">
+                                <div class="min-w-0 pr-2">
+                                    <div class="text-xs sm:text-sm font-bold truncate ${t2Loser ? 'text-slate-400/60 line-through' : (t2 ? 'text-white' : 'text-slate-400/70 italic')}">
+                                        ${t2 ? escapeHtml(t2.name) : 'Ожидает соперника...'}
+                                    </div>
+                                    ${t2 ? `<div class="text-[10px] ${t2Loser ? 'text-slate-500' : 'text-slate-300/75'} truncate">${escapeHtml(t2.p1)} & ${escapeHtml(t2.p2)}</div>` : ''}
+                                </div>
+                                <span class="font-display font-bold text-sm ${t2Winner ? 'text-emerald-300' : (t2Loser ? 'text-slate-500' : 'text-slate-300')}">
+                                    ${outcome ? outcome.s2 : '-'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Баннер чемпиона
+            const finalOutcome = getPlayoffOutcome(state.playoffs.final);
+            const champBanner = document.getElementById('champion-banner');
+            if (finalOutcome) {
+                const champId = finalOutcome.winnerSlot === 1 ? state.playoffs.final.t1 : state.playoffs.final.t2;
+                const champTeam = getTeamById(champId);
+                if (champTeam) {
+                    document.getElementById('champion-name').textContent = champTeam.name;
+                    document.getElementById('champion-players').textContent = `${champTeam.p1} & ${champTeam.p2}`;
+                    const wasHidden = champBanner.classList.contains('hidden');
+                    champBanner.classList.remove('hidden');
+                    if (wasHidden) {
+                        champBanner.classList.remove('cc-champion-celebrate');
+                        void champBanner.offsetWidth;
+                        champBanner.classList.add('cc-champion-celebrate');
+                    }
+                }
+            } else {
+                champBanner.classList.add('hidden');
+                champBanner.classList.remove('cc-champion-celebrate');
+            }
+        }
+
+        // ==================== ПЕРЕНОС ИЗ ГРУПП В ПЛЕЙ-ОФФ ====================
+        function seedPlayoffsFromGroups() {
+            if (!isAdmin) return;
+            const stA = getGroupStandings('A');
+            const stB = getGroupStandings('B');
+
+            // Полуфиналы: А1 vs Б2, Б1 vs А2
+            state.playoffs.sf1.t1 = stA[0]?.id || null;
+            state.playoffs.sf1.t2 = stB[1]?.id || null;
+            state.playoffs.sf1.bsWinner = null;
+            state.playoffs.sf1.st2Winner = null;
+            state.playoffs.sf1.tbWinner = null;
+
+            state.playoffs.sf2.t1 = stB[0]?.id || null;
+            state.playoffs.sf2.t2 = stA[1]?.id || null;
+            state.playoffs.sf2.bsWinner = null;
+            state.playoffs.sf2.st2Winner = null;
+            state.playoffs.sf2.tbWinner = null;
+
+            // Сброс финала и матча за 3 место
+            state.playoffs.final.t1 = null;
+            state.playoffs.final.t2 = null;
+            state.playoffs.final.bsWinner = null;
+            state.playoffs.final.st2Winner = null;
+            state.playoffs.final.tbWinner = null;
+
+            state.playoffs.third.t1 = null;
+            state.playoffs.third.t2 = null;
+            state.playoffs.third.bsWinner = null;
+            state.playoffs.third.st2Winner = null;
+            state.playoffs.third.tbWinner = null;
+
+            // Стыковые: А3 vs Б3 и А4 vs Б4
+            state.playoffs.fifth.t1 = stA[2]?.id || null;
+            state.playoffs.fifth.t2 = stB[2]?.id || null;
+            state.playoffs.fifth.bsWinner = null;
+            state.playoffs.fifth.st2Winner = null;
+            state.playoffs.fifth.tbWinner = null;
+
+            state.playoffs.seventh.t1 = stA[3]?.id || null;
+            state.playoffs.seventh.t2 = stB[3]?.id || null;
+            state.playoffs.seventh.bsWinner = null;
+            state.playoffs.seventh.st2Winner = null;
+            state.playoffs.seventh.tbWinner = null;
+
+            saveState();
+            switchTab('playoffs');
+            showToast('Сетка плей-офф обновлена по итогам групп!');
+        }
+
+        // Авто-продвижение победителей и проигравших из полуфиналов
+        function advancePlayoffBracket() {
+            const sf1Out = getPlayoffOutcome(state.playoffs.sf1);
+            if (sf1Out) {
+                state.playoffs.final.t1 = sf1Out.winnerSlot === 1 ? state.playoffs.sf1.t1 : state.playoffs.sf1.t2;
+                state.playoffs.third.t1 = sf1Out.loserSlot === 1 ? state.playoffs.sf1.t1 : state.playoffs.sf1.t2;
+            } else {
+                state.playoffs.final.t1 = null;
+                state.playoffs.third.t1 = null;
+            }
+
+            const sf2Out = getPlayoffOutcome(state.playoffs.sf2);
+            if (sf2Out) {
+                state.playoffs.final.t2 = sf2Out.winnerSlot === 1 ? state.playoffs.sf2.t1 : state.playoffs.sf2.t2;
+                state.playoffs.third.t2 = sf2Out.loserSlot === 1 ? state.playoffs.sf2.t1 : state.playoffs.sf2.t2;
+            } else {
+                state.playoffs.final.t2 = null;
+                state.playoffs.third.t2 = null;
+            }
+        }
+
+        // ==================== МОДАЛЬНОЕ ОКНО ВВОДА СЧЕТА ====================
+        function openMatchModal(type, id) {
+            if (!isAdmin) {
+                showToast('Доступно только в режиме организатора');
+                return;
+            }
+
+            let match = type === 'group'
+                ? state.groupMatches.find(m => m.id === id)
+                : state.playoffs[id];
+
+            if (!match || !match.t1 || !match.t2) return;
+
+            const t1 = getTeamById(match.t1);
+            const t2 = getTeamById(match.t2);
+
+            activeMatchEdit = {
+                type,
+                id,
+                bsWinner: match.bsWinner,
+                st2Winner: match.st2Winner,
+                tbWinner: match.tbWinner || null
+            };
+
+            document.getElementById('modal-match-stage').textContent = type === 'group'
+                ? `Группа ${match.group}`
+                : match.title;
+
+            document.getElementById('modal-t1-name').textContent = t1.name;
+            document.getElementById('modal-t1-players').textContent = `${t1.p1} & ${t1.p2}`;
+            document.getElementById('modal-t2-name').textContent = t2.name;
+            document.getElementById('modal-t2-players').textContent = `${t2.p1} & ${t2.p2}`;
+
+            document.getElementById('modal-st2-label').textContent = (type === 'playoff' && id === 'final')
+                ? '2. Standoff 2 (Карта: SANDSTONE)'
+                : '2. Standoff 2 (Союзники, рандом)';
+
+            // Подписи кнопок с названиями команд
+            ['bs', 'st2', 'tb'].forEach(disc => {
+                document.getElementById(`btn-${disc}-1`).textContent = t1.name;
+                document.getElementById(`btn-${disc}-2`).textContent = t2.name;
+            });
+
+            updateMatchModalUI();
+
+            const modal = document.getElementById('match-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeMatchModal() {
+            const modal = document.getElementById('match-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            activeMatchEdit = null;
+        }
+
+        function selectDisciplineWinner(disc, teamSlot) {
+            if (!activeMatchEdit) return;
+            if (disc === 'bs') activeMatchEdit.bsWinner = teamSlot;
+            if (disc === 'st2') activeMatchEdit.st2Winner = teamSlot;
+            if (disc === 'tb') activeMatchEdit.tbWinner = teamSlot;
+            updateMatchModalUI();
+        }
+
+        function updateMatchModalUI() {
+            if (!activeMatchEdit) return;
+            const { type, bsWinner, st2Winner, tbWinner } = activeMatchEdit;
+
+            const styleButtons = (prefix, selected) => {
+                [1, 2].forEach(slot => {
+                    const btn = document.getElementById(`btn-${prefix}-${slot}`);
+                    if (selected === slot) {
+                        btn.className = 'py-2 px-3 rounded-lg border border-green-400 bg-green-500/20 text-green-300 text-xs font-bold transition truncate';
+                    } else {
+                        btn.className = 'py-2 px-3 rounded-lg border border-gray-700 bg-gray-900 text-gray-400 hover:text-white text-xs font-bold transition truncate';
+                    }
+                });
+            };
+
+            styleButtons('bs', bsWinner);
+            styleButtons('st2', st2Winner);
+            styleButtons('tb', tbWinner);
+
+            // Проверка на ничью 1:1 в плей-офф (нужен тай-брейк)
+            const isDraw = bsWinner !== null && st2Winner !== null && bsWinner !== st2Winner;
+            const tbBox = document.getElementById('tiebreaker-box');
+            if (type === 'playoff' && isDraw) {
+                tbBox.classList.remove('hidden');
+            } else {
+                tbBox.classList.add('hidden');
+                activeMatchEdit.tbWinner = null;
+            }
+
+            let s1 = 0, s2 = 0;
+            if (bsWinner === 1) s1++; else if (bsWinner === 2) s2++;
+            if (st2Winner === 1) s1++; else if (st2Winner === 2) s2++;
+
+            let previewText = `${s1} : ${s2}`;
+            if (type === 'playoff' && isDraw && activeMatchEdit.tbWinner) {
+                previewText += activeMatchEdit.tbWinner === 1 ? ' (Тай-брейк: К1)' : ' (Тай-брейк: К2)';
+            }
+            document.getElementById('modal-total-preview').textContent = previewText;
+        }
+
+        function clearMatchResult() {
+            if (!activeMatchEdit) return;
+            activeMatchEdit.bsWinner = null;
+            activeMatchEdit.st2Winner = null;
+            activeMatchEdit.tbWinner = null;
+            saveMatchResult(true);
+        }
+
+        function saveMatchResult(allowEmpty = false) {
+            if (!activeMatchEdit) return;
+            const { type, id, bsWinner, st2Winner, tbWinner } = activeMatchEdit;
+
+            if (!allowEmpty && (bsWinner === null || st2Winner === null)) {
+                showToast('Выберите победителя в обеих играх!');
+                return;
+            }
+
+            if (!allowEmpty && type === 'playoff' && bsWinner !== st2Winner && tbWinner === null) {
+                showToast('При счете 1:1 выберите победителя тай-брейка!');
+                return;
+            }
+
+            if (type === 'group') {
+                const match = state.groupMatches.find(m => m.id === id);
+                match.bsWinner = bsWinner;
+                match.st2Winner = st2Winner;
+            } else {
+                const match = state.playoffs[id];
+                match.bsWinner = bsWinner;
+                match.st2Winner = st2Winner;
+                match.tbWinner = tbWinner;
+                advancePlayoffBracket();
+            }
+
+            saveState();
+            closeMatchModal();
+            showToast('Результат матча сохранен!');
+        }
+
+        // ==================== РЕДАКТОР КОМАНД ====================
+        function openTeamsModal() {
+            if (!isAdmin) return;
+            const list = document.getElementById('teams-editor-list');
+            list.innerHTML = state.teams.map(t => `
+                <div class="bg-gray-950 border border-gray-800 rounded-xl p-3.5 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold ${t.group === 'A' ? 'text-purple-400' : 'text-cyan-400'}">Группа ${t.group} • Команда #${t.id}</span>
+                    </div>
+                    <input type="text" id="edit-team-name-${t.id}" value="${escapeHtml(t.name)}" placeholder="Название команды" class="w-full px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-700 text-white text-xs font-bold focus:outline-none focus:border-purple-500">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="edit-team-p1-${t.id}" value="${escapeHtml(t.p1)}" placeholder="Игрок 1" class="w-full px-2.5 py-1.5 rounded-lg bg-gray-900 border border-gray-700 text-gray-300 text-xs focus:outline-none focus:border-purple-500">
+                        <input type="text" id="edit-team-p2-${t.id}" value="${escapeHtml(t.p2)}" placeholder="Игрок 2" class="w-full px-2.5 py-1.5 rounded-lg bg-gray-900 border border-gray-700 text-gray-300 text-xs focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+            `).join('');
+
+            const modal = document.getElementById('teams-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeTeamsModal() {
+            const modal = document.getElementById('teams-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveTeamsEdit() {
+            state.teams.forEach(t => {
+                const nameVal = document.getElementById(`edit-team-name-${t.id}`).value.trim();
+                const p1Val = document.getElementById(`edit-team-p1-${t.id}`).value.trim();
+                const p2Val = document.getElementById(`edit-team-p2-${t.id}`).value.trim();
+                if (nameVal) t.name = nameVal;
+                if (p1Val) t.p1 = p1Val;
+                if (p2Val) t.p2 = p2Val;
+            });
+            saveState();
+            closeTeamsModal();
+            showToast('Составы команд обновлены!');
+        }
+
+        // ==================== НАВИГАЦИЯ, АДМИНКА И МОДАЛКИ ====================
+        function switchTab(tab) {
+            const groupsView = document.getElementById('view-groups');
+            const playoffsView = document.getElementById('view-playoffs');
+            const historyView = document.getElementById('view-history');
+            const tabGroups = document.getElementById('tab-groups');
+            const tabPlayoffs = document.getElementById('tab-playoffs');
+            const tabHistory = document.getElementById('tab-history');
+
+            const activeClass = 'px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 bg-white/20 text-white border border-white/25 shadow-[0_4px_16px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.4)]';
+            const inactiveClass = 'px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 text-slate-300 hover:text-white border border-transparent';
+
+            groupsView.classList.add('hidden');
+            playoffsView.classList.add('hidden');
+            historyView.classList.add('hidden');
+            tabGroups.className = inactiveClass;
+            tabPlayoffs.className = inactiveClass;
+            tabHistory.className = inactiveClass;
+
+            if (tab === 'groups') {
+                groupsView.classList.remove('hidden');
+                tabGroups.className = activeClass;
+            } else if (tab === 'playoffs') {
+                playoffsView.classList.remove('hidden');
+                tabPlayoffs.className = activeClass;
+            } else if (tab === 'history') {
+                historyView.classList.remove('hidden');
+                tabHistory.className = activeClass;
+                renderHistoryView();
+                lucide.createIcons();
+            }
+        }
+
+        // ==================== ИСТОРИЯ СЕЗОНОВ И МАТЧЕЙ ====================
+        function getAllSeasonsForHistory() {
+            const currentSeasonObj = {
+                id: 'current',
+                seasonNumber: state.seasonNumber || 1,
+                title: `CLASS CUP #${state.seasonNumber || 1}`,
+                subtitle: (state.seasonNumber || 1) === 1 ? 'Первый сезон • Текущий турнир' : `Сезон #${state.seasonNumber} • Текущий турнир`,
+                isCurrent: true,
+                dateLabel: 'Активный сезон',
+                teams: state.teams,
+                groupMatches: state.groupMatches,
+                playoffs: state.playoffs
+            };
+            return [...(state.archivedSeasons || []), currentSeasonObj];
+        }
+
+        function selectHistorySeason(seasonId) {
+            selectedHistorySeasonId = seasonId;
+            renderHistoryView();
+            lucide.createIcons();
+        }
+
+        function getSeasonChampionInfo(seasonObj) {
+            const fin = seasonObj.playoffs?.final;
+            if (!fin) return null;
+            const out = getPlayoffOutcome(fin);
+            if (!out) return null;
+            const champId = out.winnerSlot === 1 ? fin.t1 : fin.t2;
+            return (seasonObj.teams || []).find(t => t.id === champId) || null;
+        }
+
+        function renderHistoryView() {
+            const cardsGrid = document.getElementById('seasons-cards-grid');
+            const detailPanel = document.getElementById('season-detail-panel');
+            if (!cardsGrid || !detailPanel) return;
+
+            const allSeasons = getAllSeasonsForHistory();
+            if (!allSeasons.some(s => s.id === selectedHistorySeasonId)) {
+                selectedHistorySeasonId = allSeasons[0]?.id || 'current';
+            }
+
+            cardsGrid.innerHTML = allSeasons.map(s => {
+                const isSelected = s.id === selectedHistorySeasonId;
+                const champ = getSeasonChampionInfo(s);
+                const playedCount = (s.groupMatches || []).filter(m => m.bsWinner !== null && m.st2Winner !== null).length
+                    + Object.values(s.playoffs || {}).filter(m => m.bsWinner !== null && m.st2Winner !== null).length;
+
+                return `
+                    <div onclick="selectHistorySeason('${s.id}')" class="cursor-pointer rounded-2xl p-4 transition-all backdrop-blur-xl border ${isSelected ? 'bg-white/[0.14] border-cyan-300/60 shadow-[0_0_28px_rgba(34,211,238,0.22),inset_0_1px_1px_rgba(255,255,255,0.35)]' : 'bg-white/[0.06] border-white/15 hover:bg-white/[0.1]'}">
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${s.isCurrent ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/35' : 'bg-amber-500/20 text-amber-300 border border-amber-400/35'}">
+                                ${s.title.toLowerCase().includes('#1') || s.title.toLowerCase().includes('перв') ? 'ПЕРВЫЙ CLASS CUP' : (s.isCurrent ? 'Идёт сейчас' : s.dateLabel)}
+                            </span>
+                            <span class="text-[11px] text-slate-400">Матчей: <b class="text-white">${playedCount}</b></span>
+                        </div>
+                        <div class="font-display font-bold text-lg text-white flex items-center gap-2">
+                            <i data-lucide="trophy" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                            <span>${escapeHtml(s.title)}</span>
+                        </div>
+                        <p class="text-xs text-slate-300/80 mt-0.5">${escapeHtml(s.subtitle)}</p>
+                        <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-xs">
+                            <span class="text-slate-400">Чемпион:</span>
+                            <span class="font-bold ${champ ? 'text-amber-300' : 'text-slate-400 italic'}">
+                                ${champ ? escapeHtml(champ.name) : 'Определяется...'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const activeSeason = allSeasons.find(s => s.id === selectedHistorySeasonId) || allSeasons[0];
+            if (!activeSeason) return;
+
+            const findTeam = (id) => (activeSeason.teams || []).find(t => t.id === id) || null;
+            const champ = getSeasonChampionInfo(activeSeason);
+
+            const playoffList = [
+                activeSeason.playoffs?.final,
+                activeSeason.playoffs?.third,
+                activeSeason.playoffs?.sf1,
+                activeSeason.playoffs?.sf2,
+                activeSeason.playoffs?.fifth,
+                activeSeason.playoffs?.seventh
+            ].filter(Boolean);
+
+            const renderHistoryMatchRow = (m, badgeText) => {
+                const t1 = findTeam(m.t1);
+                const t2 = findTeam(m.t2);
+                const isPlayed = m.bsWinner !== null && m.st2Winner !== null;
+                let s1 = '-', s2 = '-';
+                let w1 = false, w2 = false;
+
+                if (isPlayed) {
+                    const p1 = (m.bsWinner === 1 ? 1 : 0) + (m.st2Winner === 1 ? 1 : 0);
+                    const p2 = 2 - p1;
+                    s1 = m.tbWinner === 1 ? '1+ТБ' : p1;
+                    s2 = m.tbWinner === 2 ? '1+ТБ' : p2;
+                    w1 = p1 > p2 || m.tbWinner === 1;
+                    w2 = p2 > p1 || m.tbWinner === 2;
+                }
+
+                return `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-white/[0.05] border border-white/10 text-xs">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="px-2 py-0.5 rounded-md bg-white/10 text-slate-300 text-[10px] font-bold shrink-0">${escapeHtml(badgeText)}</span>
+                            <span class="font-bold truncate ${w1 ? 'text-emerald-300' : 'text-white'}">${t1 ? escapeHtml(t1.name) : 'TBD'}</span>
+                            <span class="text-slate-400">vs</span>
+                            <span class="font-bold truncate ${w2 ? 'text-emerald-300' : 'text-white'}">${t2 ? escapeHtml(t2.name) : 'TBD'}</span>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+                            <span class="text-[11px] text-slate-400">
+                                ${isPlayed ? `БС: ${m.bsWinner === 1 ? (t1?.name || 'К1') : (t2?.name || 'К2')} • СТ2: ${m.st2Winner === 1 ? (t1?.name || 'К1') : (t2?.name || 'К2')}` : 'Ещё не сыгран'}
+                            </span>
+                            <span class="font-display font-bold text-sm px-2.5 py-0.5 rounded-lg bg-black/30 border border-white/15 text-white">
+                                ${s1} : ${s2}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            };
+
+            detailPanel.innerHTML = `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/15 pb-4">
+                    <div>
+                        <h3 class="font-display font-bold text-lg sm:text-xl text-white">${escapeHtml(activeSeason.title)} — История матчей</h3>
+                        <p class="text-xs text-slate-300/80">${escapeHtml(activeSeason.subtitle)}</p>
+                    </div>
+                    ${champ ? `
+                        <div class="px-4 py-2 rounded-2xl bg-amber-500/15 border border-amber-300/40 text-xs">
+                            <span class="text-amber-300 font-bold">🏆 Победители: ${escapeHtml(champ.name)}</span>
+                            <span class="text-slate-200 ml-1">(${escapeHtml(champ.p1)} & ${escapeHtml(champ.p2)})</span>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-300 mb-3">Матчи Плей-офф</h4>
+                    <div class="space-y-2">
+                        ${playoffList.map(m => renderHistoryMatchRow(m, m.title)).join('')}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-purple-300 mb-3">Матчи Группы А</h4>
+                        <div class="space-y-2">
+                            ${(activeSeason.groupMatches || []).filter(m => m.group === 'A').map((m, i) => renderHistoryMatchRow(m, `Группа А • #${i + 1}`)).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-300 mb-3">Матчи Группы Б</h4>
+                        <div class="space-y-2">
+                            ${(activeSeason.groupMatches || []).filter(m => m.group === 'B').map((m, i) => renderHistoryMatchRow(m, `Группа Б • #${i + 1}`)).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function archiveCurrentSeasonPrompt() {
+            if (!isAdmin) return;
+            const currentNum = state.seasonNumber || 1;
+            document.getElementById('archive-season-title').value = `CLASS CUP #${currentNum} (${currentNum === 1 ? 'Первый сезон' : 'Сезон ' + currentNum})`;
+            document.getElementById('next-season-number').value = currentNum + 1;
+            const modal = document.getElementById('archive-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeArchiveModal() {
+            const modal = document.getElementById('archive-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function executeArchiveSeason() {
+            if (!isAdmin) return;
+            const titleVal = document.getElementById('archive-season-title').value.trim() || `CLASS CUP #${state.seasonNumber || 1}`;
+            const nextNum = parseInt(document.getElementById('next-season-number').value, 10) || ((state.seasonNumber || 1) + 1);
+            const todayStr = new Date().toLocaleDateString('ru-RU');
+
+            const snapshot = {
+                id: 'season_' + Date.now(),
+                seasonNumber: state.seasonNumber || 1,
+                title: titleVal,
+                subtitle: (state.seasonNumber || 1) === 1 ? 'Первый сезон • Завершён' : `Сезон #${state.seasonNumber} • Завершён`,
+                isCurrent: false,
+                dateLabel: todayStr,
+                teams: JSON.parse(JSON.stringify(state.teams)),
+                groupMatches: JSON.parse(JSON.stringify(state.groupMatches)),
+                playoffs: JSON.parse(JSON.stringify(state.playoffs))
+            };
+
+            const updatedArchive = [...(state.archivedSeasons || []), snapshot];
+            const freshState = JSON.parse(JSON.stringify(defaultState));
+            freshState.seasonNumber = nextNum;
+            freshState.seasonLabel = `CLASS CUP #${nextNum} • Сезон ${nextNum}`;
+            freshState.archivedSeasons = updatedArchive;
+
+            state = freshState;
+            selectedHistorySeasonId = snapshot.id;
+            saveState();
+            closeArchiveModal();
+            switchTab('history');
+            showToast(`Сезон сохранён в архив! Открыт CLASS CUP #${nextNum}`);
+        }
+
+        function toggleAdminMode() {
+            if (isAdmin) {
+                isAdmin = false;
+                updateAdminUI();
+                showToast('Вы вышли из режима организатора');
+            } else {
+                document.getElementById('admin-password-input').value = '';
+                document.getElementById('admin-error-msg').classList.add('hidden');
+                const modal = document.getElementById('admin-login-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => document.getElementById('admin-password-input').focus(), 100);
+            }
+        }
+
+        function closeAdminLoginModal() {
+            const modal = document.getElementById('admin-login-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function submitAdminPassword() {
+            const input = document.getElementById('admin-password-input').value;
+            if (input === ADMIN_PASS) {
+                isAdmin = true;
+                closeAdminLoginModal();
+                updateAdminUI();
+                showToast('Режим организатора включен!');
+            } else {
+                document.getElementById('admin-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function updateAdminUI() {
+            const toolbar = document.getElementById('admin-toolbar');
+            const label = document.getElementById('admin-label');
+            const icon = document.getElementById('admin-icon');
+            const btn = document.getElementById('admin-toggle-btn');
+
+            if (isAdmin) {
+                toolbar.classList.remove('hidden');
+                label.textContent = 'Выйти';
+                icon.setAttribute('data-lucide', 'unlock');
+                btn.className = 'flex items-center gap-1.5 px-3 py-2 rounded-xl bg-green-600/20 hover:bg-green-600/30 border border-green-500/50 text-green-300 text-xs sm:text-sm font-semibold transition active:scale-95';
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+                renderSeasonDashboard();
+            } else {
+                toolbar.classList.add('hidden');
+                label.textContent = 'Админ';
+                icon.setAttribute('data-lucide', 'lock');
+                btn.className = 'flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/50 text-purple-300 text-xs sm:text-sm font-semibold transition active:scale-95';
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+            }
+            renderAll();
+        }
+
+        function openRulesModal() {
+            const modal = document.getElementById('rules-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeRulesModal() {
+            const modal = document.getElementById('rules-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openPrizesModal() {
+            const modal = document.getElementById('prizes-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closePrizesModal() {
+            const modal = document.getElementById('prizes-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmResetTournament() {
+            const modal = document.getElementById('reset-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('reset-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function executeResetTournament() {
+            const keptArchive = JSON.parse(JSON.stringify(state.archivedSeasons || []));
+            const keptSeasonNum = state.seasonNumber || 1;
+            state = JSON.parse(JSON.stringify(defaultState));
+            state.seasonNumber = keptSeasonNum;
+            state.archivedSeasons = keptArchive;
+            saveState();
+            closeResetModal();
+            showToast('Турнирная таблица и сетка сброшены');
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // ==================== ЗВУКОВЫЕ ЭФФЕКТЫ CLASS CUP ====================
+        // Синтезированные электронные звуки — внешние аудиофайлы не нужны.
+        const cupAudio = { context: null, enabled: localStorage.getItem('classCupSound') !== 'off', unlocked: false };
+        async function unlockCupAudio() {
+            if (!cupAudio.context) { const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false; cupAudio.context=new AC(); }
+            try { if(cupAudio.context.state!=='running') await cupAudio.context.resume(); cupAudio.unlocked=cupAudio.context.state==='running'; }
+            catch(err) { cupAudio.unlocked=false; }
+            return cupAudio.unlocked;
+        }
+        function cupTone(freq,duration=.12,type='sine',volume=.085,endFreq=null,delay=0) {
+            if(!cupAudio.enabled||!cupAudio.unlocked||!cupAudio.context) return;
+            const ctx=cupAudio.context,start=ctx.currentTime+delay,osc=ctx.createOscillator(),gain=ctx.createGain();
+            osc.type=type; osc.frequency.setValueAtTime(freq,start);
+            if(endFreq) osc.frequency.exponentialRampToValueAtTime(Math.max(1,endFreq),start+duration);
+            const boosted=Math.min(.32,volume*2.8);
+            gain.gain.setValueAtTime(.0001,start); gain.gain.exponentialRampToValueAtTime(boosted,start+.012); gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+            osc.connect(gain); gain.connect(ctx.destination); osc.start(start); osc.stop(start+duration+.025);
+        }
+        function playCupSound(kind='click') {
+            if(!cupAudio.enabled||!cupAudio.unlocked) return;
+            if(kind==='intro') {
+                // Более заметная кинематографичная тема: басовый удар, подъём и широкий финальный аккорд.
+                cupTone(48,1.45,'sine',.22,92);
+                cupTone(96,1.15,'triangle',.16,196,.08);
+                cupTone(196,.95,'sawtooth',.075,392,.32);
+                cupTone(392,.85,'triangle',.10,784,.72);
+                [523,659,784,1046].forEach((f,i)=>cupTone(f,.55,'sine',.09,null,1.25+i*.11));
+                cupTone(65,1.2,'sine',.18,130,1.65);
+                [784,988,1175,1568].forEach((f,i)=>cupTone(f,.42,'triangle',.075,null,2.05+i*.075));
+            } else if(kind==='badge') {
+                cupTone(440,.24,'triangle',.11,880);
+                cupTone(880,.38,'sine',.075,1320,.08);
+            } else if(kind==='reveal') {
+                cupTone(72,.62,'sine',.20,145);
+                cupTone(220,.52,'triangle',.12,440,.12);
+                cupTone(660,.42,'sine',.08,990,.28);
+            } else if(kind==='letter') {
+                cupTone(740,.075,'triangle',.085,1120);
+                cupTone(1480,.045,'sine',.035,1750,.012);
+            } else if(kind==='enter') {
+                // Уверенный фирменный звук входа.
+                cupTone(196,.32,'sawtooth',.055,392);
+                cupTone(294,.34,'triangle',.065,587,.1);
+                cupTone(392,.48,'sine',.07,784,.22);
+                cupTone(784,.22,'sine',.035,988,.48);
+            } else if(kind==='hover') {
+                cupTone(660,.075,'sine',.018,880);
+            } else if(kind==='success') {
+                [392,494,587,784,988].forEach((f,i)=>cupTone(f,.24,'sine',.055,null,i*.105));
+            } else if(kind==='tab') {
+                cupTone(440,.085,'triangle',.045,554);
+                cupTone(660,.11,'sine',.035,880,.055);
+            } else {
+                cupTone(520,.065,'triangle',.045,390);
+                cupTone(780,.055,'sine',.022,620,.045);
+            }
+        }
+        function updateSoundToggle() {
+            const b=document.getElementById('sound-toggle'); if(!b) return;
+            b.innerHTML=`<i data-lucide="${cupAudio.enabled?'volume-2':'volume-x'}" class="w-5 h-5"></i>`;
+            b.setAttribute('aria-label',cupAudio.enabled?'Выключить звук':'Включить звук'); b.setAttribute('aria-pressed',String(cupAudio.enabled));
+            if(typeof lucide!=='undefined') lucide.createIcons({nodes:[b]});
+        }
+        window.addEventListener('DOMContentLoaded',()=>{
+            const toggle=document.getElementById('sound-toggle'); updateSoundToggle();
+            // Запускаем заставку только после явного нажатия: браузер тогда разрешает звук,
+            // поэтому музыка и визуальная анимация стартуют синхронно.
+            const intro=document.getElementById('netflix-intro');
+            if(intro && !document.getElementById('intro-start-gate')) {
+                const gate=document.createElement('div');
+                gate.id='intro-start-gate';
+                gate.className='absolute inset-0 z-[90] flex items-end sm:items-center justify-center pb-16 sm:pb-0 bg-slate-950/25 backdrop-blur-[2px]';
+                gate.innerHTML='<button type="button" id="intro-start-button" class="px-9 py-4 rounded-full border-2 border-amber-300/80 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 text-slate-950 font-black tracking-[.22em] shadow-[0_0_45px_rgba(251,191,36,.5)] hover:scale-105 active:scale-95 transition">НАЧАТЬ</button>';
+                intro.appendChild(gate);
+                gate.querySelector('button').addEventListener('click',async()=>{
+                    const ok=await unlockCupAudio();
+                    if(ok && cupAudio.enabled) playCupSound('intro');
+                    gate.style.transition='opacity .35s ease'; gate.style.opacity='0'; gate.style.pointerEvents='none';
+                    setTimeout(()=>gate.remove(),380);
+                    initNetflixIntro();
+                },{once:true});
+            }
+            toggle?.addEventListener('click',async e=>{
+                e.stopPropagation(); cupAudio.enabled=!cupAudio.enabled; localStorage.setItem('classCupSound',cupAudio.enabled?'on':'off');
+                if(cupAudio.enabled){ await unlockCupAudio(); playCupSound('success'); } updateSoundToggle();
+            });
+            document.addEventListener('click',e=>{
+                const b=e.target.closest('button'); if(!b||b.disabled||b.id==='sound-toggle'||b.id==='intro-start-button') return;
+                playCupSound(b.classList.contains('oval-enter-btn')?'enter':(b.closest('[role="tab"],.tab-button')?'tab':'click'));
+            },true);
+            document.addEventListener('pointerover',e=>{
+                const b=e.target.closest('button'); if(!b||b.disabled||b.id==='sound-toggle'||b.id==='intro-start-button') return;
+                if(e.relatedTarget&&b.contains(e.relatedTarget)) return; playCupSound('hover');
+            });
+        });
+
+        // Мягкий ripple-эффект при нажатии на интерактивные элементы
+        window.addEventListener('DOMContentLoaded', () => {
+            document.addEventListener('click', (event) => {
+                const target = event.target.closest('button');
+                if (!target || target.disabled) return;
+                const rect = target.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                const size = Math.max(rect.width, rect.height) * .55;
+                ripple.className = 'arena-ripple';
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+                ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+                if (getComputedStyle(target).position === 'static') target.style.position = 'relative';
+                target.style.overflow = 'hidden';
+                target.appendChild(ripple);
+                ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
+            });
+        });
+
+        // Запуск при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAll();
+        });
+        window.addEventListener('load', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+
+    <!-- ==================== ОБЛАЧНАЯ СИНХРОНИЗАЦИЯ В РЕАЛЬНОМ ВРЕМЕНИ ==================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Обновляем бейдж статуса синхронизации в шапке
+        function setSyncBadge(mode, labelText) {
+            const dot = document.getElementById('sync-dot');
+            const text = document.getElementById('sync-text');
+            if (!dot || !text) return;
+
+            text.textContent = labelText;
+            dot.className = 'w-2 h-2 rounded-full ' + (
+                mode === 'live' ? 'bg-emerald-400' :
+                mode === 'syncing' ? 'bg-cyan-400 animate-ping' :
+                'bg-amber-400'
+            );
+        }
+
+        // Безопасная сериализация состояния турнира для хранения в облаке
+        function serializeTournamentState(srcState) {
+            return {
+                seasonNumber: srcState.seasonNumber || 1,
+                seasonLabel: srcState.seasonLabel || 'CLASS CUP #1 • Первый сезон',
+                teams: JSON.parse(JSON.stringify(srcState.teams)),
+                groupMatches: JSON.parse(JSON.stringify(srcState.groupMatches)),
+                playoffs: JSON.parse(JSON.stringify(srcState.playoffs)),
+                archivedSeasons: JSON.parse(JSON.stringify(srcState.archivedSeasons || [])),
+                mvp: srcState.mvp || '',
+                nextMatchAt: srcState.nextMatchAt || '',
+                updatedAt: Date.now()
+            };
+        }
+
+        // Проверка корректности загруженного из облака состояния
+        function isValidTournamentState(data) {
+            return data &&
+                Array.isArray(data.teams) &&
+                Array.isArray(data.groupMatches) &&
+                data.playoffs &&
+                data.playoffs.sf1 &&
+                data.playoffs.final;
+        }
+
+        async function initCloudSync() {
+            try {
+                // Подключаемся только если среда передала конфигурацию облака
+                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+                    setSyncBadge('local', 'Локально');
+                    return;
+                }
+
+                const firebaseConfig = typeof __firebase_config === 'string'
+                    ? JSON.parse(__firebase_config)
+                    : __firebase_config;
+
+                const appId = typeof __app_id !== 'undefined' && __app_id
+                    ? __app_id
+                    : 'class-cup-bs-st2';
+
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+
+                setSyncBadge('syncing', 'Вход...');
+
+                // Авторизация строго до обращений к базе данных
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                if (!auth.currentUser) {
+                    setSyncBadge('local', 'Локально');
+                    return;
+                }
+
+                // Публичный путь для общего просмотра всеми участниками турнира
+                const tournamentDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tournament_state', 'main_cup');
+
+                let suppressNextSnapshotToast = false;
+                let hasReceivedInitialSnapshot = false;
+
+                // Подписка на изменения в реальном времени с обработчиком ошибок
+                onSnapshot(
+                    tournamentDocRef,
+                    async (snap) => {
+                        try {
+                            if (snap.exists()) {
+                                const remoteData = snap.data();
+                                if (isValidTournamentState(remoteData)) {
+                                    const normalized = {
+                                        seasonNumber: remoteData.seasonNumber || 1,
+                                        seasonLabel: remoteData.seasonLabel || 'CLASS CUP #1 • Первый сезон',
+                                        teams: remoteData.teams,
+                                        groupMatches: remoteData.groupMatches,
+                                        playoffs: remoteData.playoffs,
+                                        archivedSeasons: Array.isArray(remoteData.archivedSeasons) ? remoteData.archivedSeasons : [],
+                                        mvp: remoteData.mvp || '',
+                                        nextMatchAt: remoteData.nextMatchAt || ''
+                                    };
+                                    seasonMVP = normalized.mvp;
+                                    nextMatchAt = normalized.nextMatchAt;
+                                    const currentSerialized = JSON.stringify({
+                                        seasonNumber: state.seasonNumber,
+                                        teams: state.teams,
+                                        groupMatches: state.groupMatches,
+                                        playoffs: state.playoffs,
+                                        archivedSeasons: state.archivedSeasons,
+                                        mvp: state.mvp || '',
+                                        nextMatchAt: state.nextMatchAt || ''
+                                    });
+                                    const remoteSerialized = JSON.stringify({
+                                        seasonNumber: normalized.seasonNumber,
+                                        teams: normalized.teams,
+                                        groupMatches: normalized.groupMatches,
+                                        playoffs: normalized.playoffs,
+                                        archivedSeasons: normalized.archivedSeasons,
+                                        mvp: normalized.mvp || '',
+                                        nextMatchAt: normalized.nextMatchAt || ''
+                                    });
+
+                                    if (currentSerialized !== remoteSerialized) {
+                                        state = normalized;
+                                        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                                        renderAll();
+                                        if (hasReceivedInitialSnapshot && !suppressNextSnapshotToast && !isAdmin) {
+                                            showToast('Турнирная таблица обновлена организатором!');
+                                        }
+                                    }
+                                    suppressNextSnapshotToast = false;
+                                    hasReceivedInitialSnapshot = true;
+                                    setSyncBadge('live', 'Онлайн');
+                                }
+                            } else if (auth.currentUser) {
+                                // При первом запуске создаем начальный документ турнира в облаке
+                                suppressNextSnapshotToast = true;
+                                await setDoc(tournamentDocRef, serializeTournamentState(state));
+                                hasReceivedInitialSnapshot = true;
+                                setSyncBadge('live', 'Онлайн');
+                            }
+                        } catch (snapshotErr) {
+                            console.warn('Облачный снимок недоступен, используется локальное состояние:', snapshotErr);
+                            setSyncBadge('local', 'Локально');
+                        }
+                    },
+                    (error) => {
+                        console.warn('Облачная синхронизация отключена или нет прав доступа, работаем локально:', error);
+                        setSyncBadge('local', 'Локально');
+                    }
+                );
+
+                // Оборачиваем локальное сохранение saveState, чтобы любые правки админа улетали всем
+                const originalSaveState = window.saveState;
+                window.saveState = function () {
+                    originalSaveState();
+                    if (!auth.currentUser) return;
+
+                    setSyncBadge('syncing', 'Сохранение...');
+                    suppressNextSnapshotToast = true;
+
+                    setDoc(tournamentDocRef, serializeTournamentState(state))
+                        .then(() => {
+                            setSyncBadge('live', 'Онлайн');
+                        })
+                        .catch((err) => {
+                            console.warn('Не удалось отправить в облако, сохранено локально:', err);
+                            suppressNextSnapshotToast = false;
+                            setSyncBadge('local', 'Локально');
+                        });
+                };
+
+                setSyncBadge('live', 'Онлайн');
+            } catch (err) {
+                console.warn('Облако не подключено, используется локальный режим:', err);
+                setSyncBadge('local', 'Локально');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initCloudSync();
+        });
+    </script>
+</body>
+</html>
