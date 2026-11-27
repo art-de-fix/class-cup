@@ -2099,17 +2099,6 @@
         showToast('Режим организатора включен!');
     } catch (error) {
         console.error('Ошибка входа:', error);
-        errorMsg.textContent = 'Неверный email или пароль!';
-        errorMsg.classList.remove('hidden');
-    }
-}
-
-        isAdmin = true;
-        closeAdminLoginModal();
-        updateAdminUI();
-        showToast('Режим организатора включен!');
-    } catch (error) {
-        console.error('Ошибка входа:', error);
         errorMsg.textContent = 'Неверный пароль или ошибка входа!';
         errorMsg.classList.remove('hidden');
     }
