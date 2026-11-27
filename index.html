@@ -1032,6 +1032,12 @@
                 <i data-lucide="shield-check" class="w-6 h-6"></i>
             </div>
             <h3 class="font-display font-bold text-lg text-white text-center mb-4">Режим Организатора</h3>
+            <input
+    type="email"
+    id="admin-email-input"
+    placeholder="Введите email..."
+    class="w-full px-4 py-2.5 rounded-xl bg-gray-950 border border-gray-700 text-white text-sm focus:outline-none focus:border-purple-500 mb-2"
+>
             
             <input type="password" id="admin-password-input" placeholder="Введите пароль..." class="w-full px-4 py-2.5 rounded-xl bg-gray-950 border border-gray-700 text-white text-sm focus:outline-none focus:border-purple-500 mb-2" onkeydown="if(event.key==='Enter') submitAdminPassword()">
             <p id="admin-error-msg" class="hidden text-xs text-red-400 mb-3 text-center">Неверный пароль!</p>
@@ -2071,17 +2077,43 @@
             modal.classList.remove('flex');
         }
 
-        function submitAdminPassword() {
-            const input = document.getElementById('admin-password-input').value;
-            if (input === ADMIN_PASS) {
-                isAdmin = true;
-                closeAdminLoginModal();
-                updateAdminUI();
-                showToast('Режим организатора включен!');
-            } else {
-                document.getElementById('admin-error-msg').classList.remove('hidden');
-            }
+      async function submitAdminPassword() {
+    const email = document.getElementById('admin-email-input').value.trim();
+    const password = document.getElementById('admin-password-input').value;
+    const errorMsg = document.getElementById('admin-error-msg');
+
+    try {
+        if (!window.firebaseAdminLogin) {
+            throw new Error('Firebase ещё не загружен');
         }
+
+        const credential = await window.firebaseAdminLogin(email, password);
+
+        if (credential.user.uid !== 'Of8YAFn6ppSco4VlHYG1N1Ouw4h2') {
+            throw new Error('Нет прав организатора');
+        }
+
+        isAdmin = true;
+        closeAdminLoginModal();
+        updateAdminUI();
+        showToast('Режим организатора включен!');
+    } catch (error) {
+        console.error('Ошибка входа:', error);
+        errorMsg.textContent = 'Неверный email или пароль!';
+        errorMsg.classList.remove('hidden');
+    }
+}
+
+        isAdmin = true;
+        closeAdminLoginModal();
+        updateAdminUI();
+        showToast('Режим организатора включен!');
+    } catch (error) {
+        console.error('Ошибка входа:', error);
+        errorMsg.textContent = 'Неверный пароль или ошибка входа!';
+        errorMsg.classList.remove('hidden');
+    }
+}
 
         function updateAdminUI() {
             const toolbar = document.getElementById('admin-toolbar');
@@ -2291,7 +2323,12 @@
     <!-- ==================== ОБЛАЧНАЯ СИНХРОНИЗАЦИЯ В РЕАЛЬНОМ ВРЕМЕНИ ==================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+       import {
+    getAuth,
+    signInAnonymously,
+    signInWithCustomToken,
+    signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Обновляем бейдж статуса синхронизации в шапке
@@ -2336,22 +2373,26 @@
         async function initCloudSync() {
             try {
                 // Подключаемся только если среда передала конфигурацию облака
-                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
-                    setSyncBadge('local', 'Локально');
-                    return;
-                }
-
-                const firebaseConfig = typeof __firebase_config === 'string'
-                    ? JSON.parse(__firebase_config)
-                    : __firebase_config;
+                const firebaseConfig = {
+    apiKey: "AIzaSyD0I6_hIRPur8arvgZG4C90FEg1lz9NOm4",
+    authDomain: "class-cup-c1717.firebaseapp.com",
+    projectId: "class-cup-c1717",
+    storageBucket: "class-cup-c1717.firebasestorage.app",
+    messagingSenderId: "340774856398",
+    appId: "1:340774856398:web:13ed504e89a335179e529f",
+    measurementId: "G-V4ZGZEHJW3"
+};
 
                 const appId = typeof __app_id !== 'undefined' && __app_id
                     ? __app_id
-                    : 'class-cup-bs-st2';
+                    : 'class-cup-c1717';
 
                 const app = initializeApp(firebaseConfig);
                 const auth = getAuth(app);
                 const db = getFirestore(app);
+                window.firebaseAdminLogin = async function(email, password) {
+    return await signInWithEmailAndPassword(auth, email, password);
+};
 
                 setSyncBadge('syncing', 'Вход...');
 
@@ -2368,7 +2409,7 @@
                 }
 
                 // Публичный путь для общего просмотра всеми участниками турнира
-                const tournamentDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tournament_state', 'main_cup');
+                const tournamentDocRef = doc(db, 'tournaments', 'main_cup');
 
                 let suppressNextSnapshotToast = false;
                 let hasReceivedInitialSnapshot = false;
